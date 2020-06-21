@@ -28,6 +28,10 @@ body {
     min-height:100vh!important
 }
 
+.min-vw-100 {
+    min-width:100vw!important
+}
+
 #welcome h1 {
     font-weight: bolder;
     font-size: 70px;
