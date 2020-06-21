@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Karthik's portfolio website">
+    <meta name="keywords" content="Karthik, Kartik U J, portfolio website, portfolio, personal website">
+    <meta name="author" content="Karthik U J">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Bootstrap 3-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+
+    <!--Fontawesome 5-->
+    <script src="https://kit.fontawesome.com/481b40f157.js"></script>
+
+    <!--Bootstrap 4-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>-->  
+
+    <!--Smooth scroll-->
+    <script>
+        $(document).ready(function(){
+          // Add smooth scrolling to all links
+          $("a").on('click', function(event) {
+        
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "") {
+              // Prevent default anchor click behavior
+              event.preventDefault();
+        
+              // Store hash
+              var hash = this.hash;
+        
+              // Using jQuery's animate() method to add smooth page scroll
+              // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+              $('html, body').animate({
+                scrollTop: $(hash).offset().top
+              }, 800, function(){
+           
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+              });
+            } // End if
+          });
+        });
+    </script>
+
+    <title>Karthik U J</title>
+</head>
+
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="nav">
+		<div class="container" >
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="index.html#" class="navbar-brand">Karthik</a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#about" title="About" class="cool-link"> ABOUT <span class="glyphicon glyphicon-user"></span></a></li>
+					<li><a href="#education" title="Education" class="cool-link"> EDUCATION <span class="glyphicon glyphicon-pencil"></span></a></li>
+					<li><a href="#skills" title="Skills" class="cool-link"> SKILLS <span class="glyphicon glyphicon-wrench"></span></a></li>
+                    <li><a href="#projects" title="Projects" class="cool-link"> PROJECTS <span class="glyphicon glyphicon-cog"></span></a></li>
+                    <li><a href="#experience" title="Experience" class="cool-link"> EXPERIENCE <span class="glyphicon glyphicon-king"></span></a></li>
+					<!--<li><a href="#bucketlist" title="Bucket list" class="cool-link"> BUCKET LIST <span class="glyphicon glyphicon-list"></span></a></li>-->
+				</ul>
+			</div>
+		</div>
+	</nav>
+    
+    <!--Main  Content-->
+    <div class="container main">
+
+        <!--Welcome Page-->
+        <div id="welcome" class="row min-vh-100">
+            <div class="col-md-4" id="home-image">
+                <img src="Images/home-image.png" alt="Karthik U J" title="Acting like I know my stuff" 
+                style="height: 438px; width: 406px;">
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-6" id="home-note">
+                <h1 title="Yup! It's my name you're hovering over">I am 
+                    <span id="orange">Karthik UJ</span><span id="dot"></span></h1>
+                <h2>
+                    I make and break websites. <br><br>
+                </h2>
+                <blockquote>
+                    <em>
+                        "Sometimes it pays to stay in bed on Monday,<br>
+                        rather than spending rest of the week debugging Monday's code."<br><br>
+                        ~Dan Salomon
+                    </em>
+                </blockquote>
+                <div id="social">
+                    <a href="mailto:karthikuj2001@gmail.com" target="_blank">
+                        <i class="fa fa-envelope" aria-hidden="true" 
+                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+
+                    <a href="https://www.facebook.com/karthikuj2001" target="_blank">
+                        <i class="fa fa-facebook-official" aria-hidden="true" 
+                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+
+                    <a href="https://www.instagram.com/5up3r541y4n/" target="_blank">
+                        <i class="fa fa-instagram" aria-hidden="true" 
+                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+
+                    <a href="https://github.com/karthikuj" target="_blank">
+                        <i class="fa fa-github" aria-hidden="true" 
+                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+
+                    <!--<i class="fa fa-linkedin-square" aria-hidden="true" 
+                    style="font-size:30px; color:dodgerblue;"></i> &nbsp;-->
+                </div>
+                <p>
+                    <a href="resume.pdf" target="_blank">Download Resume</a>
+                </p>
+            </div>
+        </div>
+
+        <!--About section-->
+        <div class="min-vh-100" id="about">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <h1>About me</h1>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row" id="about-content">
+                <div class="col-md-5">
+                    <p>
+                        I am a wannabe web developer and bug hunter. <br>
+                        Right now I am pursuing Bachelor of Computer Applications (BCA) 
+                        from Indraprastha University (IPU). <br>I consider myself to be 
+                        an avid learner. <br>I am also creative, dependable, honest, hardworking 
+                        and a humble human being.
+                    </p>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-6 contain">
+                    <img src="images/nice-1-bw.jpeg" class="image" alt="Another picture of me" 
+                    style="display: block; margin-left: auto; 
+                    margin-right: auto;">
+                    <div class="overlay">
+                        <div class="text">That's me!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Education-->
+        <div class="min-vh-100" id="education">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <h1>Education</h1>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <p>
+                        X (Secondary), Indus Valley Public School, Noida <br> 2016-17.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>
+                        XII (Senior Secondary), Indus Valley Public School, Noida 2018-19.
+                    </p>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <p>
+                        Bachelor of Computer Applications (BCA), Science, IPU 2019-22.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!--
+            If you are reading this DM me this code (ZWplqoKL) on instagram to get 50 rupees PayTM cash.
+            Offer for only for the first person to find this easter egg.
+        -->
+
+        <!--Skills-->
+        <div class="min-vh-100" id="skills">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 skills">
+                    <h1>Skills</h1>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Skills</th>
+                        <th>Level</th>
+                        <th>Training (If any)</th>
+                        <th colspan="2">Certificate</th>
+                    </tr>
+                    <tr>
+                        <td>C/C++
+                        <td>Intermediate</td>
+                        <td>School/College</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td>Beginner</td>
+                        <td>Internshala/Udemy</td>
+                        <td><a class="certificate" href="certificates/Programming with Python Training - Certificate of Completion.pdf" target="_blank">Internshala</a></td>
+                        <td><a class="certificate" href="certificates/automate-the-boring-stuff.pdf">Udemy</a></td>
+                    </tr>
+                    <tr>
+                        <td>HTML5</td>
+                        <td>Intermediate</td>
+                        <td>Internshala/Udemy</td>
+                        <td><a class="certificate" href="certificates/Web Development Training - Certificate of Completion.pdf" target="_blank">Internshala</a></td>
+                        <td><a class="certificate">Udemy (Ongoing)</a></td>
+                    </tr>
+                    <tr>
+                        <td>CSS3</td>
+                        <td>Intermediate</td>
+                        <td>Internshala/Udemy</td>
+                        <td><a class="certificate" href="certificates/Web Development Training - Certificate of Completion.pdf" target="_blank">Internshala</a></td>
+                        <td><a class="certificate">Udemy (Ongoing)</a></td>
+                    </tr>
+                    <tr>
+                        <td>Bootstrap 3</td>
+                        <td>Intermediate</td>
+                        <td>Internshala/Udemy</td>
+                        <td><a class="certificate" href="certificates/Web Development Training - Certificate of Completion.pdf" target="_blank">Internshala</a></td>
+                        <td><a class="certificate">Udemy (Ongoing)</a></td>
+                    </tr>
+                    <tr>
+                        <td>PHP</td>
+                        <td>Beginner</td>
+                        <td>Internshala/Udemy</td>
+                        <td><a class="certificate" href="certificates/Web Development Training - Certificate of Completion.pdf" target="_blank">Internshala</a></td>
+                        <td><a class="certificate">Udemy (Ongoing)</a></td>
+                    </tr>
+                    <tr>
+                        <td>MySQL</td>
+                        <td>Intermediate</td>
+                        <td>School/Internshala/Udemy</td>
+                        <td><a class="certificate" href="certificates/Web Development Training - Certificate of Completion.pdf" target="_blank">Internshala</a></td>
+                        <td><a class="certificate">Udemy (Ongoing)</a></td>
+                    </tr>
+                    <tr>
+                        <td>Web Application Security</td>
+                        <td>Beginner</td>
+                        <td>Blogs/Internshala</td>
+                        <td><a class="certificate" href="certificates/Ethical Hacking Training - Certificate of Completion.pdf" target="_blank">Internshala</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!--Projects-->
+        <div class="min-vh-100" id="projects">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <h1>Projects</h1>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        Coming soon.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!--Experience-->
+        <div class="min-vh-100" id="experience">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <h1>Experience</h1>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Company</th>
+                        <th>Duration</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr class="info">
+                        <td>Eden Retirement Living Pvt. Ltd.</td>
+                        <td>1 month <br>(May 2019 - June 2019)</td>
+                        <td>
+                            Daily goals included: email marketing using mailchimp, <br>
+                            WhatsApp marketing, setting up company's profile on Google <br>
+                            and coming up with new marketing ideas.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!--<div class="min-vh-100" id="bucketlist">
+           <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <h1>Bucket List</h1>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        Coming soon.
+                    </p>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</body>
+
+</html>
