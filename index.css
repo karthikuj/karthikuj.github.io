@@ -5,6 +5,7 @@ html {
 body {
     background-color: white;
     padding-top: 110px;
+    min-width: 100vw!important
 }
 
 @font-face {
