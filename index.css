@@ -162,7 +162,7 @@ div[id="skills"] h1::after {
 
 
 #education p {
-    line-height: 80px;
+    line-height: 60px;
     text-align: center;
     border: 2px solid orangered;
     border-radius: 20%;
