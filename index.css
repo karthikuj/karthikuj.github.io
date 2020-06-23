@@ -17,11 +17,6 @@ body {
     src: url(fonts/White\ Smith.otf);
 }
 
-nav {
-    position: absolute;
-    max-width: 100vw!important;
-}
-
 .navbar-brand {
     font-family: amalfi;
 }
