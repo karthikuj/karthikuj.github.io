@@ -3,6 +3,10 @@
     src: url(fonts/Cinzel-Regular.otf);
 }
 
+body {
+  overflow-x: hidden;
+}
+
 .promptBottom {
   position: absolute;
   left: 12px;
