@@ -1,347 +1,415 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Karthik's portfolio website">
-    <meta name="keywords" content="Karthik, Kartik U J, portfolio website, portfolio, personal website">
-    <meta name="author" content="Karthik U J">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--Bootstrap 3-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="index.css">
-    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
-
-    <!--Fontawesome 5-->
-    <script src="https://kit.fontawesome.com/481b40f157.js"></script>
-
-    <!--Bootstrap 4-->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>-->  
-
-    <!--Smooth scroll-->
-    <script>
-        $(document).ready(function(){
-          // Add smooth scrolling to all links
-          $("a").on('click', function(event) {
-        
-            // Make sure this.hash has a value before overriding default behavior
-            if (this.hash !== "") {
-              // Prevent default anchor click behavior
-              event.preventDefault();
-        
-              // Store hash
-              var hash = this.hash;
-        
-              // Using jQuery's animate() method to add smooth page scroll
-              // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-              $('html, body').animate({
-                scrollTop: $(hash).offset().top
-              }, 800, function(){
-           
-                // Add hash (#) to URL when done scrolling (default click behavior)
-                window.location.hash = hash;
-              });
-            } // End if
-          });
-        });
-    </script>
-
-    <title>Karthik U J</title>
-</head>
-
-<body>
-    <!--Navbar-->
-    <nav class="navbar navbar-inverse navbar-fixed-top" id="nav">
-		<div class="container" >
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a href="index.html#" class="navbar-brand">Karthik</a>
-			</div>
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#about" title="About" class="cool-link"> ABOUT <span class="glyphicon glyphicon-user"></span></a></li>
-					<li><a href="#education" title="Education" class="cool-link"> EDUCATION <span class="glyphicon glyphicon-pencil"></span></a></li>
-					<li><a href="#skills" title="Skills" class="cool-link"> SKILLS <span class="glyphicon glyphicon-wrench"></span></a></li>
-                    <li><a href="#projects" title="Projects" class="cool-link"> PROJECTS <span class="glyphicon glyphicon-cog"></span></a></li>
-                    <li><a href="#experience" title="Experience" class="cool-link"> EXPERIENCE <span class="glyphicon glyphicon-king"></span></a></li>
-					<!--<li><a href="#bucketlist" title="Bucket list" class="cool-link"> BUCKET LIST <span class="glyphicon glyphicon-list"></span></a></li>-->
-				</ul>
-			</div>
-		</div>
-	</nav>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="Karthik's portfolio website where he writes about cybersecurity and coding.">
+        <meta name="keywords" content="Karthik, Kartik U J, portfolio website, portfolio, personal website, cyber security, hacking, coding, software development">
+        <meta name="author" content="Karthik U J">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!--Main  Content-->
-    <div class="container main">
+        <!-- Bootstrap 5 -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+        <link rel="stylesheet" type="text/css" href="css/index.css">
 
-        <!--Welcome Page-->
-        <div id="welcome" class="row min-vh-100">
-            <div class="col-md-4" id="home-image">
-                <img src="Images/home-image.png" alt="Karthik U J" title="That's me" 
-                style="height: 438px; width: 406px;">
-            </div>
-            <div class="col-md-2">
-            </div>
-            <div class="col-md-6" id="home-note">
-                <h1>I am 
-                    <span id="orange">Karthik UJ</span><span id="dot"></span></h1>
-                <h2>
-                    I make and break stuff. <br><br>
-                </h2>
-                <blockquote>
-                    <em>
-                        "Sometimes it pays to stay in bed on Monday,<br>
-                        rather than spending rest of the week debugging Monday's code."<br><br>
-                        ~Dan Salomon
-                    </em>
-                </blockquote>
-                <div id="social">
-                    <a href="mailto:karthikuj2001@gmail.com" target="_blank">
-                        <i class="fa fa-envelope" aria-hidden="true" 
-                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+        <!-- Animate CSS -->
+        <link rel="stylesheet" href="css/animate.min.css">
+    
+        <!-- Fontawesome 5 -->
+        <script src="https://kit.fontawesome.com/481b40f157.js"></script>  
+        <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
 
-                    <a href="https://www.facebook.com/karthikuj2001" target="_blank">
-                        <i class="fa fa-facebook-official" aria-hidden="true" 
-                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+        <!-- AoS -->
+        <link rel="stylesheet" href="css/aos.css">
+        <script src="js/aos.js"></script>
+    
+        <!-- Smooth scroll -->
+        <script>
+            $(document).ready(function(){
+              // Add smooth scrolling to all links
+              $("a").on('click', function(event) {
+            
+                // Make sure this.hash has a value before overriding default behavior
+                if (this.hash !== "") {
+                  // Prevent default anchor click behavior
+                  event.preventDefault();
+            
+                  // Store hash
+                  var hash = this.hash;
+            
+                  // Using jQuery's animate() method to add smooth page scroll
+                  // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+                  $('html, body').animate({
+                    scrollTop: $(hash).offset().top
+                  }, 800, function(){
+               
+                    // Add hash (#) to URL when done scrolling (default click behavior)
+                    window.location.hash = hash;
+                  });
+                } // End if
+              });
+            });
+        </script>
 
-                    <a href="https://www.instagram.com/5up3r541y4n/" target="_blank">
-                        <i class="fa fa-instagram" aria-hidden="true" 
-                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+        <script>
+          $(window).on('hashchange',function(){
+            var url = window.location.href;
+            var loc = url.substring(url.indexOf('#') + 1);
+            var path = "~/" + loc;
+            if (loc == "top") {
+              document.getElementById("path").innerHTML = "~";
+            } else {
+              document.getElementById("path").innerHTML = path;
+            }
+          });
+        </script>
 
-                    <a href="https://github.com/karthikuj" target="_blank">
-                        <i class="fa fa-github" aria-hidden="true" 
-                        style="font-size:30px; color:dodgerblue;"></i> &nbsp;</a>
+        <!-- Fontss -->
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
+        </style>
+    
+        <title>Karthik U J</title>
+    </head>
+<body id="top">
 
-                    <!--<i class="fa fa-linkedin-square" aria-hidden="true" 
-                    style="font-size:30px; color:dodgerblue;"></i> &nbsp;-->
-                </div>
-                <p>
-                    <a href="resume.pdf" target="_blank">Download Resume</a>
-                </p>
-            </div>
+    <!-- Popper and Bootstrap 5 JS -->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+          <a onmouseover='document.getElementById("promptText").innerHTML = "cd ~"' onmouseout='document.getElementById("promptText").innerHTML = ""' class="navbar-brand" href="#top"><span style="color: #FF0000;">┌─[</span><span style="color: #39FF14;">sup3r541y4n</span><span style="color: #FFC40A;">@</span><span style="color: #679BF1;">5up3r541y4n</span><span style="color: #FF0000;">]─[</span><span id="path" style="color: #427646;">~</span><span style="color: #FF0000;">]</span><br><span class="promptBottom"><span style="color: #FF0000;">└──╼</span><span style="color: #FFC40A;"> $</span><span id="promptText" style="color: #39FF14;"></span><span class="blinking-cursor">|</span></span></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse animate__animated animate__fadeInRight" id="mynavbar">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link skill" href="#skills" onmouseover='document.getElementById("promptText").innerHTML = "cd ~/skills"' onmouseout='document.getElementById("promptText").innerHTML = ""'>SKILLS <i class="fas fa-tools"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link skill" href="#experience" onmouseover='document.getElementById("promptText").innerHTML = "cd ~/experience"' onmouseout='document.getElementById("promptText").innerHTML = ""'>EXPERIENCE <i class="fas fa-chess-king"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link skill" href="#works" onmouseover='document.getElementById("promptText").innerHTML = "cd ~/works"' onmouseout='document.getElementById("promptText").innerHTML = ""'>WORKS <i class="fas fa-pencil-ruler"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link skill" href="5up3r541y4n-notes/" onmouseover='document.getElementById("promptText").innerHTML = "cd ~/learn"' onmouseout='document.getElementById("promptText").innerHTML = ""'>LEARN <i class="fas fa-glasses"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link skill" href="#blog" onmouseover='document.getElementById("promptText").innerHTML = "cd ~/blog"' onmouseout='document.getElementById("promptText").innerHTML = ""' onclick='alert("Not started yet")'>BLOG <i class="fas fa-pen-nib"></i></a>
+              </li>
+            </ul>
+          </div>
         </div>
+    </nav>
 
-        <!--About section-->
-        <div class="min-vh-100" id="about">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <h1>About me</h1>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class="row" id="about-content">
-                <div class="col-md-5">
-                    <p>
-                        I am a wannabe web developer and bug hunter. <br>
-                        Right now I am pursuing Bachelor of Computer Applications (BCA) 
-                        from Indraprastha University (IPU). <br>I consider myself to be 
-                        an avid learner. <br>I am also creative, dependable, honest, hardworking 
-                        and a humble human being.
-                    </p>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-6 contain">
-                    <img src="Images/nice-1-bw.png" class="image" alt="Karthik" 
-                    style="display: block; margin-left: auto; 
-                    margin-right: auto;">
-			<div class="overlay">
-    				<div class="text">That's me</div>
-			</div>
-		</div>
-            </div>
+    <div class="homeTop container-fluid">
+      <div class="row">
+        <div class="col-md-5">
+          <img src="images/blueShirt.png" alt="Karthik UJ">
         </div>
+        <div class="col-md-6">
+          <h1 class="animate__animated animate__fadeInDown">I am <span style="color: #FFC40A;">Karthik UJ</span><span class="fullStop"></span></h1>
+          <div class="animate__animated animate__fadeInLeft social">
+            <a href="mailto:karthikuj2001@gmail.com" target="_blank">
+                <i class="fas fa-at" style="color: #8AB9F1; font-size: 30px;"></i>
+            </a>
 
-        <!--Education-->
-        <div class="min-vh-100" id="education">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <h1>Education</h1>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class="row">
-		    <div class="col-md-6"></div>
-		    <div class="col-md-6">
-			<p>
-                            X (Secondary), Indus Valley Public School, Noida <br> 2016-17.
-                    	</p>
-		    </div>
-             </div>
-	     <div class="row">
-		<div class="col-md-6">
-                    <p>
-                        XII (Senior Secondary), Indus Valley Public School, Noida <br> 2018-19.
-                    </p>
-                </div>
-		<div class="col-md-6"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6"></div>
-                <div class="col-md-6">
-                    <p>
-                        Bachelor of Computer Applications (BCA), Science, IPU <br> 2019-22.
-                    </p>
-                </div>
-            </div>
+            <a href="https://www.facebook.com/karthikuj2001" target="_blank">
+                <i class="fa fa-facebook-official" aria-hidden="true" 
+                style="font-size:30px; color: #8AB9F1;"> </i>
+            </a>
+
+            <a href="https://www.instagram.com/5up3r541y4n/" target="_blank">
+                <i class="fa fa-instagram" aria-hidden="true" 
+                style="font-size:30px; color: #8AB9F1;"> </i>
+            </a>
+
+            <a href="https://github.com/karthikuj" target="_blank">
+                <i class="fa fa-github" aria-hidden="true" 
+                style="font-size:30px; color: #8AB9F1;"> </i>
+            </a>
+
+            <a href="https://www.linkedin.com/in/karthikuj/" target="_blank">
+              <i class="fa fa-linkedin-square" aria-hidden="true" 
+              style="font-size:30px; color: #8AB9F1;"> </i>
+            </a>
+          </div>
+          <blockquote class="animate__animated animate__fadeInUp">
+            An undergraduate student living in India. Came a
+            long way from running automated "hacking tools"
+            to learning how stuff works and exploiting them.
+            I also have a knack for programming, which I
+            utilise to earn some money and make life easier. 
+            Besides this I like watching anime, movies, series 
+            and love learning new things. Psst... the graphic on 
+            the right changes every day of the month.
+          </blockquote>
         </div>
-
-        <!--
-            If you are reading this DM me this code (ZWplqoKL) on instagram (@5up3r541y4n) to get 50 rupees PayTM cash.
-            Offer for only for the first person to find this easter egg.
-        -->
-
-        <!--Skills-->
-        <div class="min-vh-100" id="skills">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4 skills">
-                    <h1>Skills</h1>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <tr>
-                        <th>Skills</th>
-                        <th>Level</th>
-                        <th>Training (If any)</th>
-                    </tr>
-                    <tr>
-                        <td>C/C++
-                        <td>Intermediate</td>
-                        <td>School/College</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>Python</td>
-                        <td>Beginner</td>
-                        <td>Internshala/Udemy</td>
-                    </tr>
-                    <tr>
-                        <td>HTML5</td>
-                        <td>Intermediate</td>
-                        <td>Internshala/Udemy</td>
-                    </tr>
-                    <tr>
-                        <td>CSS3</td>
-                        <td>Intermediate</td>
-                        <td>Internshala/Udemy</td>
-                    </tr>
-                    <tr>
-                        <td>Bootstrap 3</td>
-                        <td>Intermediate</td>
-                        <td>Internshala/Udemy</td>
-                    </tr>
-                    <tr>
-                        <td>MySQL</td>
-                        <td>Intermediate</td>
-                        <td>School/Internshala/Udemy</td>
-                    </tr>
-                    <tr>
-                        <td>Web Application Security</td>
-                        <td>Beginner</td>
-                        <td>Blogs/Internshala</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!--Projects-->
-        <div class="min-vh-100" id="projects">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <h1>Projects</h1>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-             <div class="table-responsive">
-                <table class="table table-striped">
-			<tr>
-				<th>Project Name</th>
-				<th>Description</th>
-                    	</tr>
-			<tr>
-				<td><a href="https://github.com/karthikuj/SearchIt/" title="SearchIt">SearchIt</a></td>
-				<td>A command line tool to search multiple search engines easily</td>
-			</tr>
-		</table>
-	     </div>
-        </div>
-
-        <!--Experience-->
-        <div class="min-vh-100" id="experience">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <h1>Experience</h1>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <tr>
-                        <th>Company</th>
-                        <th>Duration</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr class="info">
-                        <td>Eden Retirement Living Pvt. Ltd. <br> (Sales and Marketing intern)</td>
-                        <td>1 month <br>(May 2019 - June 2019)</td>
-                        <td>
-                            Daily goals included: email marketing using mailchimp, <br>
-                            WhatsApp marketing, setting up company's profile on Google <br>
-                            and coming up with new marketing ideas.
-                        </td>
-                    </tr>
-		    <tr class="info">
-                        <td>Harvard University</td>
-                        <td>NA</td>
-                        <td>
-                            Found multiple security vulnerabilites in Harvard University for <br>
-			    which I recieved two letters of appreciation from the <br>
-			    Chief Information Security Officer of Harvard University.<br><br>
-			    <a href="https://media-exp1.licdn.com/dms/image/C562DAQEJ033EhEKA1A/profile-treasury-image-shrink_1920_1920/0/1607233335015?e=1621526400&v=beta&t=xynYU_I-jd0pddHm1V2zjc5q8aczUD3Ryqwh4MbbA-g">
-			    LOA 1
-			    </a><br><br>
-			    <a href="https://media-exp1.licdn.com/dms/image/C562DAQHpdqpWNEjgFQ/profile-treasury-image-shrink_1920_1920/0/1607233454969?e=1621526400&v=beta&t=3wKhve6-Z_e_LImTjsjWQOEDyjU_wvecpnwtVbX8pgM">
-			    LOA 2
-		 	    </a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!--<div class="min-vh-100" id="bucketlist">
-           <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <h1>Bucket List</h1>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p>
-                        Coming soon.
-                    </p>
-                </div>
-            </div>
-        </div>-->
+      </div>
+      <img src="something" alt="wave" id="graphic">
+      <script>
+        var dateObj = new Date();
+        var day = dateObj.getUTCDate();
+        var name = "images/graphic" + day + ".png"
+        var wide = [4, 5, 8, 9, 10, 12, 16, 18, 19, 20, 21, 26, 29];
+        var veryWide = [7, 11, 14, 17, 24, 28, 30];
+        var ultraWide = [15, 27];
+        var zyadaWide = [25];
+        document.getElementById("graphic").src = name;
+        if (wide.includes(day)) {
+          document.getElementById("graphic").style.right = "-40px";
+        } else if (veryWide.includes(day)) {
+          document.getElementById("graphic").style.right = "-85px";
+        } else if (ultraWide.includes(day)) {
+          document.getElementById("graphic").style.right = "-140px";
+        } else if (zyadaWide.includes(day)) {
+          document.getElementById("graphic").style.right = "-160px";
+        }
+      </script>
     </div>
-</body>
 
+    <div class="recently container-fluid">
+      <div class="row">
+        <div class="col-md-6 animate__animated animate__rotateInDownLeft" id="recent">
+          <p>─ Recently</p>
+          <h3>Wassup Karthik?</h3>
+          <p>
+            Recently I have started reading a bit more, my ongoing read being Vagabonding by Rolf 
+            Potts. Besides this the recent crypto laws (30% tax in profits from digital assets) in 
+            India has screwed us over, but the silver lining being that it hasn't totally been banned.
+          </p>
+          <div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-4 animate__animated animate__rotateInUpRight">
+          <div id="goals">
+            <h4>Goals 2022</h4>
+            <ul>
+              <li><i class="far fa-check-square"></i> Update your portfolio.</li>
+              <li><i class="far fa-square"></i> Create notes of what you learn.</li>
+              <li><i class="far fa-square"></i> Maintain a blog.</li>
+              <li><i class="far fa-square"></i> Start reading more.</li>
+              <li><i class="far fa-square"></i> Get into bug bounties.</li>
+              <li><i class="far fa-square"></i> Try to learn Indian Sign Language.</li>
+              <li><i class="far fa-square"></i> Create an awesome project.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skills container-fluid" id="skills">
+      <div class="row skillBox">
+        <div class="col-md-6">
+          <h1 data-aos="fade-up-right">Skills<span class="fullStop2"></span></h1>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+      </div>
+
+      <div data-aos="fade-down" data-aos-duration="1000" class="row skillRow">
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>HTML5</h4><i class="fab fa-html5" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>CSS3</h4><i class="fab fa-css3-alt" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>PYTHON3</h4><i class="fab fa-python" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+      </div>
+
+      <div data-aos="fade-down" data-aos-duration="1000" class="row skillRow">
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>SHELL SCRIPTING</h4><i class="fas fa-terminal" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>INFORMATION SECURITY</h4><i class="fas fa-user-secret" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>JAVASCRIPT</h4><i class="fab fa-js-square" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+      </div>
+
+      <div data-aos="fade-down" data-aos-duration="1000" class="row skillRow">
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>LINUX</h4><i class="fab fa-linux" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>BOOTSTRAP</h4><i class="fab fa-bootstrap" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>SQL</h4><i class="fas fa-database" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+      </div>
+
+      <div data-aos="fade-down" data-aos-duration="1000" class="row skillRow">
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>C++</h4><i class="fas fa-brackets-curly" style="font-size:40px; color: #2F2E2C;"></i>
+            <!-- <i class="fas fa-code" style="font-size:40px; color: #2F2E2C;"></i> -->
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>GIT</h4><i class="fab fa-git-alt" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tech">
+            <h4>PHP</h4><i class="fab fa-php" style="font-size:40px; color: #2F2E2C;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="experience container-fluid" id="experience">
+      <div class="row">
+        <h1 data-aos="fade-up-right">Experience<span class="fullStop2"></span></h1>
+      </div>
+
+      <div data-aos="fade-up" class="row company">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+          <img src="images/harvard.png" alt="Harvard University">
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+          <p>
+            I got two Letters of Appreciation (LOA) from the Chief Information Security Officer (CISO) 
+            of Harvard University for finding and reporting vulnerabilities in their network. 
+          </p>
+        </div>
+      </div>
+
+      <div data-aos="fade-up" class="row company">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+          <img src="images/astra.png" alt="Astra Security">
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+          <p>
+            I am currently interning here at Astra Security as an SDE. I work mostly on the web 
+            vulnerability scanner. It is an awesome place to work at. 
+          </p>
+        </div>
+      </div>
+
+      <div data-aos="fade-up" class="row company">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+          <img src="images/bbc.png" alt="British Broadcasting Corporation (BBC)">
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+          <p>
+            I got Hall of Fame on <a href="https://www.bbc.com/backstage/security-disclosure-policy/acknowledgements/" target="_blank">BBC's website</a> 
+            for finding and reporting security vulnerabilities on their website.
+          </p>
+        </div>
+      </div>
+
+      <div data-aos="fade-up" class="row company">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+          <img src="images/nykaa.png" alt="Nykaa">
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+          <p>
+            I got Letter of Appreciation from the security team of Nykaa for finding and reporting 
+            security vulnerabilities on their website.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="works container-fluid" id="works">
+      <div class="row">
+        <h1 data-aos="fade-up-right">Works<span class="fullStop2"></span></h1>
+      </div>
+
+      <div data-aos="fade-up" class="row project">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+          <img src="images/7uring.png" alt="7uring">
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+          <p>
+            A cryptography tool which can encode/decode, hash/crack-hash, cipher/decipher in many 
+            common algorithms. What makes it unique is it can check online rainbow tables to crack hashes 
+            besides using a dictionary attack. Made using Python3, install it using <code>pip install 7uring</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="container-fluid">
+      <div id="footer">
+        <div class="social">
+          <a href="mailto:karthikuj2001@gmail.com" target="_blank">
+              <i class="fas fa-at" style="color: lightslategray; font-size: 20px;"></i>
+          </a>
+
+          <a href="https://www.facebook.com/karthikuj2001" target="_blank">
+              <i class="fa fa-facebook-official" aria-hidden="true" 
+              style="font-size:20px; color: lightslategray;"> </i>
+          </a>
+
+          <a href="https://www.instagram.com/5up3r541y4n/" target="_blank">
+              <i class="fa fa-instagram" aria-hidden="true" 
+              style="font-size:20px; color: lightslategray;"> </i>
+          </a>
+
+          <a href="https://github.com/karthikuj" target="_blank">
+              <i class="fa fa-github" aria-hidden="true" 
+              style="font-size:20px; color: lightslategray;"> </i>
+          </a>
+
+          <a href="https://www.linkedin.com/in/karthikuj/" target="_blank">
+            <i class="fa fa-linkedin-square" aria-hidden="true" 
+            style="font-size:20px; color: lightslategray;"> </i>
+          </a>
+        </div>
+        <div>
+          <p>&copy; Karthik UJ 2001-2022</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      AOS.init();
+    </script>
+</body>
 </html>

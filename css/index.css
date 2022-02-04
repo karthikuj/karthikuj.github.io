@@ -1,0 +1,248 @@
+@font-face {
+    font-family: cinzel;
+    src: url(fonts/Cinzel-Regular.otf);
+}
+
+.promptBottom {
+  position: absolute;
+  left: 12px;
+  top: 27px;
+}
+
+.navbar-brand {
+  color: #39FF14;
+}
+
+.skill {
+  margin-right: 70px;
+}
+
+.homeTop h1 {
+  color: white;
+  font-family: sans-serif;
+  font-weight: bolder;
+  font-size: 80px;
+}
+
+.fullStop {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  background-color: #ffc40a;
+  border-radius: 50%;
+}
+
+.fullStop2 {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  background-color: #F8DE7E;
+  border-radius: 50%;
+}
+
+blockquote {
+  color: #f8f8ff;
+  border-left: 5px solid lightgrey;
+  margin-top: 20px;
+  padding-left: 20px;
+  font-family: montserrat;
+}
+
+.social a {
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+#graphic {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.blinking-cursor {
+  font-weight: bold;
+  font-size: 30px;
+  color: #39FF14;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+
+@keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: #39FF14;
+  }
+}
+
+@-moz-keyframes blink {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: #39FF14;
+  }
+}
+
+@-webkit-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: #39FF14;
+  }
+}
+
+@-ms-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: #39FF14;
+  }
+}
+
+@-o-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: #39FF14;
+  }
+}
+
+nav {
+  z-index: 1;
+}
+
+.homeTop {
+  background-color: rgb(33, 37, 41);
+  padding-top: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.recently {
+  background-color: #242734;
+  color: #ede6d4;
+  font-family: 'Poppins', sans-serif;
+  padding: 40px 200px;
+  padding-bottom: 200px;
+}
+
+.recently p {
+  font-family: montserrat;
+}
+
+#goals {
+  background-color: #F8DE7E;
+  color: #2F2E2C;
+  border-radius: 20px;
+  padding: 25px 20px;
+  width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+#goals ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+.dot {
+  height: 20px;
+  width: 20px;
+  background-color: khaki;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.skills {
+  background-color: rgb(33, 37, 41);
+  color: #ede6d4;
+  font-family: 'Viga', sans-serif;
+  font-size: 20px;
+  padding: 40px 100px;
+}
+
+.skillBox h1 {
+  color: #F8DE7E;
+  font-family: 'Viga', sans-serif;
+  font-size: 60px;
+  padding-top: 80px;
+}
+
+.tech {
+  background-color: #8AB9F1;
+  color: #2F2E2C;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+.skillRow {
+  padding-top: 20px;
+}
+
+.experience {
+  background-color: #242734;
+  color: #ede6d4;
+  padding: 40px 100px;
+  font-size: 17px;
+  font-family: montserrat;
+}
+
+.experience h1 {
+  color: #F8DE7E;
+  font-family: 'Viga', sans-serif;
+  font-size: 60px;
+  padding-top: 80px;
+}
+
+.experience a {
+  color: #F8DE7E;
+  text-decoration: none;  
+}
+
+.experience a:visited {
+  color: #F8DE7E;
+}
+
+.company {
+  margin-top: 40px;
+}
+
+.works {
+  background-color: rgb(33, 37, 41);
+  color: #ede6d4;
+  font-family: montserrat;
+  font-size: 17px;
+  padding: 40px 100px;
+}
+
+.works h1 {
+  color: #F8DE7E;
+  font-family: 'Viga', sans-serif;
+  font-size: 60px;
+  padding-top: 80px;
+}
+
+.project {
+  margin-top: 40px;
+}
+
+footer {
+  background-color: #081018;
+  color: lightslategray;
+  font-size: 15px;
+  font-family: montserrat;
+  text-align: center;
+  padding: 10px;
+  padding-top: 25px;
+}
