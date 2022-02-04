@@ -5,6 +5,11 @@
 
 body {
   overflow-x: hidden;
+  cursor: url("../images/rinnepointer.png"), auto;
+}
+
+a {
+  cursor: url("../images/mspointer.png"), auto;
 }
 
 .promptBottom {
