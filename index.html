@@ -74,6 +74,9 @@
           @import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
         </style>
 
+        <!-- Scroll to div -->
+        <script src="./js/waypoints/lib/noframework.waypoints.min.js"></script>
+
         <title>Karthik U J</title>
     </head>
 <body id="top">
@@ -82,7 +85,7 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top" id="navbar">
         <div class="container-fluid">
           <a onmouseover='document.getElementById("promptText").innerHTML = "cd ~"' onmouseout='document.getElementById("promptText").innerHTML = ""' class="navbar-brand" href="#top"><span style="color: #FF0000;">┌─[</span><span style="color: #39FF14;">sup3r541y4n</span><span style="color: #FFC40A;">@</span><span style="color: #679BF1;">5up3r541y4n</span><span style="color: #FF0000;">]─[</span><span id="path" style="color: #427646;">~</span><span style="color: #FF0000;">]</span><br><span class="promptBottom"><span style="color: #FF0000;">└──╼</span><span style="color: #FFC40A;"> $</span><span id="promptText" style="color: #39FF14;"></span><span class="blinking-cursor">|</span></span></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
@@ -110,7 +113,7 @@
         </div>
     </nav>
 
-    <div class="homeTop container-fluid">
+    <div class="homeTop container-fluid" id="homeTop">
       <div class="row">
         <div class="col-md-5 col-xs-5">
           <img src="images/blueShirt.png" class="img-fluid" alt="Karthik UJ">
@@ -178,7 +181,7 @@
       </script>
     </div>
 
-    <div class="recently container-fluid">
+    <div class="recently container-fluid" id="recently">
       <div class="row">
         <div class="col-md-1 col-xs-1"></div>
         <div class="col-md-5 col-xs-5 animate__animated animate__rotateInDownLeft" id="recent">
@@ -423,12 +426,51 @@
             elements[i].style.display = "none";
           }
 
-          document.getElementById("exph").style.fontSize = "50px";
+          document.getElementById("exph").style.fontSize = "40px";
       }
     </script>
 
     <script>
       AOS.init();
+    </script>
+    <script>
+
+      var homeTop = new Waypoint({
+        element: document.getElementById('homeTop'),
+        handler: function() {
+          document.getElementById("navbar").style.backgroundColor = "rgb(33, 37, 41)";
+        },
+        offset: -10
+      });
+
+      var recently = new Waypoint({
+        element: document.getElementById('recently'),
+        handler: function() {
+          document.getElementById("navbar").style.backgroundColor = "#242734";
+        }
+      });
+
+      var skills = new Waypoint({
+        element: document.getElementById('skills'),
+        handler: function() {
+          document.getElementById("navbar").style.backgroundColor = "rgb(33, 37, 41)";
+        }
+      });
+
+      var experience = new Waypoint({
+        element: document.getElementById('experience'),
+        handler: function() {
+          document.getElementById("navbar").style.backgroundColor = "#242734";
+        }
+      });
+
+      var works = new Waypoint({
+        element: document.getElementById('works'),
+        handler: function() {
+          document.getElementById("navbar").style.backgroundColor = "rgb(33, 37, 41)";
+        },
+        offset: 56
+      });
     </script>
 </body>
 </html>
