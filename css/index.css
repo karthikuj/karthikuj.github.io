@@ -62,7 +62,7 @@ blockquote {
   border-left: 5px solid lightgrey;
   margin-top: 20px;
   padding-left: 20px;
-  font-family: montserrat;
+  font-family: sans-serif;
 }
 
 .social a {
@@ -157,7 +157,7 @@ nav {
 }
 
 .recently p {
-  font-family: montserrat;
+  font-family: sans-serif;
 }
 
 #goals {
@@ -217,7 +217,7 @@ nav {
   color: #ede6d4;
   padding: 40px 100px;
   font-size: 17px;
-  font-family: montserrat;
+  font-family: sans-serif;
 }
 
 .experience h1 {
@@ -243,7 +243,7 @@ nav {
 .works {
   background-color: rgb(33, 37, 41);
   color: #ede6d4;
-  font-family: montserrat;
+  font-family: sans-serif;
   font-size: 17px;
   padding: 40px 100px;
 }
@@ -263,7 +263,7 @@ footer {
   background-color: #081018;
   color: lightslategray;
   font-size: 15px;
-  font-family: montserrat;
+  font-family: sans-serif;
   text-align: center;
   padding: 10px;
   padding-top: 25px;

@@ -24,34 +24,6 @@
         <link rel="stylesheet" href="css/aos.css">
         <script src="js/aos.js"></script>
 
-        <!-- Smooth scroll -->
-        <!-- <script>
-            $(document).ready(function(){
-              // Add smooth scrolling to all links
-              $("a").on('click', function(event) {
-
-                // Make sure this.hash has a value before overriding default behavior
-                if (this.hash !== "") {
-                  // Prevent default anchor click behavior
-                  event.preventDefault();
-
-                  // Store hash
-                  var hash = this.hash;
-
-                  // Using jQuery's animate() method to add smooth page scroll
-                  // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-                  $('html, body').animate({
-                    scrollTop: $(hash).offset().top
-                  }, 800, function(){
-
-                    // Add hash (#) to URL when done scrolling (default click behavior)
-                    window.location.hash = hash;
-                  });
-                } // End if
-              });
-            });
-        </script> -->
-
         <script>
           $(window).on('hashchange',function(){
             var url = window.location.href;
@@ -145,15 +117,11 @@
               style="font-size:30px; color: #8AB9F1;"> </i>
             </a>
           </div>
-          <blockquote class="animate__animated animate__fadeInUp">
-            An undergraduate student living in India. Came a
-            long way from running automated "hacking tools"
-            to learning how stuff works and exploiting them.
-            I also have a knack for programming, which I
-            utilise to earn some money and make life easier.
-            Besides this I like watching anime, movies, series
-            and love learning new things. <span class="mobileHai">Psst... the graphic on
-            the right changes every day of the month.</span>
+          <blockquote class="blockquote animate__animated animate__fadeInUp">
+            I work as a Software Engineer developing security tools
+            and researching new trendy vulnerabilities. In my own time 
+            I create or contribute to open-source security tools, solve CTFs or 
+            learn something new.
           </blockquote>
         </div>
         <div class="col-md-1 col-xs-1"></div>
@@ -188,9 +156,9 @@
           <p>─ Recently</p>
           <h3>Wassup Karthik?</h3>
           <p>
-            Recently I have started reading a bit more, my ongoing read being Vagabonding by Rolf
-            Potts. Besides this the recent crypto laws (30% tax in profits from digital assets) in
-            India has screwed us over, but the silver lining being that it hasn't totally been banned.
+            Currently I am working on my open-source tool Sasori, it is a dynamic web crawler built on top
+            of Google's Puppeteer library. It supports authentication, integrates with proxy servers like 
+            Burp Suite or Zaproxy for easy bug bounty automation.
           </p>
           <div>
             <div class="dot"></div>
@@ -203,15 +171,12 @@
 
         <div class="col-md-5 col-xs-5 animate__animated animate__rotateInUpRight">
           <div id="goals">
-            <h4>Goals 2022</h4>
+            <h4>Goals 2024</h4>
             <ul>
-              <li><i class="far fa-check-square"></i> Update your portfolio.</li>
-              <li><i class="far fa-square"></i> Create notes of what you learn.</li>
-              <li><i class="far fa-square"></i> Maintain a blog.</li>
-              <li><i class="far fa-square"></i> Start reading more.</li>
-              <li><i class="far fa-square"></i> Get into bug bounties.</li>
-              <li><i class="far fa-square"></i> Try to learn Indian Sign Language.</li>
-              <li><i class="far fa-square"></i> Create an awesome project.</li>
+              <li><i class="far fa-check-square"></i> Release Sasori v0.1.0</li>
+              <li><i class="far fa-square"></i> Become pwn.college green belt</li>
+              <li><i class="far fa-square"></i> Become an OSCP</li>
+              <li><i class="far fa-square"></i> Become a certified scuba diver</li>
             </ul>
           </div>
         </div>
@@ -328,8 +293,7 @@
         <div class="col-md-1 col-xs-1"></div>
         <div class="col-md-6 col-xs-6">
           <p>
-            I am currently interning here at Astra Security as an SDE. I work mostly on the web
-            vulnerability scanner. It is an awesome place to work at.
+            I am currently working here at Astra Security as an SDE. All in all, an awesome place to work at.
           </p>
         </div>
       </div>
@@ -376,9 +340,24 @@
         <div class="col-md-1 col-xs-1"></div>
         <div class="col-md-6 col-xs-6">
           <p>
-            A cryptography tool which can encode/decode, hash/crack-hash, cipher/decipher in many
+            7uring is a cryptography tool which can encode/decode, hash/crack-hash, cipher/decipher in many
             common algorithms. What makes it unique is it can check online rainbow tables to crack hashes
             besides using a dictionary attack. Made using Python3, install it using <code>pip install 7uring</code>.
+          </p>
+        </div>
+      </div>
+
+      <div data-aos="fade-up" class="row project">
+        <div class="col-md-1 col-xs-1"></div>
+        <div class="col-md-4 col-xs-4">
+          <img src="images/sasori-logo.png" width="200px" class="img-fluid" alt="7uring">
+        </div>
+        <div class="col-md-1 col-xs-1"></div>
+        <div class="col-md-6 col-xs-6">
+          <p>
+            Sasori is a dynamic web crawler powered by Puppeteer, designed for lightning-fast endpoint discovery.             
+            It supports authentication, proxy server integration and can be customized to meet your specific use case. 
+            Made using JavaScript, install it using <code>npm install -g sasori-crawl</code>.
           </p>
         </div>
       </div>
@@ -412,7 +391,7 @@
           </a>
         </div>
         <div>
-          <p>&copy; Karthik UJ 2001-2022</p>
+          <p>&copy; Karthik UJ 2001-2024</p>
         </div>
       </div>
     </footer>
