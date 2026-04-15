@@ -1,0 +1,97 @@
+---
+import { getCollection, render } from 'astro:content';
+import readingTime from 'reading-time';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Bio from '../../components/Bio.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts');
+	return posts.map((p) => ({
+		params: { slug: p.data.slug },
+		props: { post: p },
+	}));
+}
+
+const { post } = Astro.props;
+const { title, slug, description, publishDate, tags = [] } = post.data;
+const readingTimeEstimate = readingTime(post.body).text;
+const permalink = `${Astro.site?.href ?? ''}blog/${slug}`;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current="blog">
+	<header>
+		<p>{publishDate} ~ {readingTimeEstimate}</p>
+		<h1>{title}</h1>
+		{
+			tags.length > 0 && (
+				<ul class="post-tags">
+					{tags.map((tag) => (
+						<li>
+							<a href={`/blog?tag=${encodeURIComponent(tag)}`} data-astro-reload>
+								{tag}
+							</a>
+						</li>
+					))}
+				</ul>
+			)
+		}
+		<hr />
+	</header>
+	<div class="container">
+		<article class="content">
+			<Content />
+		</article>
+		<hr />
+		<Bio />
+	</div>
+</BaseLayout>
+
+<style>
+	header {
+		text-align: center;
+	}
+
+	header h1 {
+		margin-bottom: 0.5em;
+	}
+
+	header p {
+		color: var(--text-secondary);
+		text-transform: uppercase;
+		font-family: var(--font-family-sans);
+		font-weight: 600;
+	}
+
+	header hr {
+		min-width: 100px;
+		width: 30%;
+	}
+
+	.post-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		justify-content: center;
+		margin: 0.75rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.post-tags a {
+		display: inline-block;
+		font-size: 0.75em;
+		font-weight: 600;
+		font-family: var(--font-family-sans);
+		padding: 0.2em 0.65em;
+		border-radius: 999px;
+		text-decoration: none;
+		color: var(--text-main);
+		border: 1px solid var(--text-secondary);
+	}
+
+	.post-tags a:hover {
+		border-color: var(--primary-color);
+		color: var(--primary-color);
+	}
+</style>

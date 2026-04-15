@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const title = SITE_TITLE;
+const description = SITE_DESCRIPTION;
+const permalink = Astro.site?.href ?? '';
+---
+
+<BaseLayout title={title} description={description} permalink={permalink}>
+	<div class="home-container">
+		<div class="home-copy">
+			<h1>Hi, I am Karthik</h1>
+			<p>
+				I am a software engineer at <a href="https://www.phonepe.com/">PhonePe</a>, where I help build
+				products people use every day. I care about clear systems, reliable software, and the details
+				that help teams ship well.
+			</p>
+			<p>
+				Outside of work I am a security enthusiast: I like digging into how things break, how they are
+				defended, and how we can design with security in mind without getting in the way of good
+				experiences.
+			</p>
+			<p>
+				This site is for longer notes—mostly engineering, sometimes security-adjacent topics, and
+				whatever I am learning. Browse the <a href="/blog" data-astro-reload>blog</a> or read more <a href="/about">about me</a>.
+			</p>
+		</div>
+
+		<div class="hero-image-container">
+			<picture>
+				<source srcset="/assets/home-illustration.webp" media="(min-width: 600px)" />
+				<img
+					class="hero-image"
+					alt="Illustration of person reading a book"
+					src="/assets/home-illustration-small.webp"
+					width="550"
+					height="466"
+				/>
+			</picture>
+			<p class="caption">
+				Illustration by
+				<a href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6" target="_blank" rel="noopener"
+					>Icons 8</a
+				>
+				from
+				<a href="https://icons8.com/illustrations" target="_blank" rel="noopener">Ouch!</a>
+			</p>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.home-container {
+		align-items: center;
+		display: flex;
+		flex: 1;
+		justify-content: center;
+		margin: 2em 0;
+		min-height: 400px;
+	}
+
+	.home-copy {
+		flex: 1;
+		padding: 0 1em;
+	}
+
+	.home-copy h1 {
+		font-weight: 700;
+		margin-bottom: 0.5em;
+		line-height: 1.3;
+	}
+
+	.home-copy p {
+		font-size: 1.4em;
+	}
+
+	.hero-image-container {
+		margin: 0 1em;
+		text-align: center;
+	}
+
+	.hero-image-container picture {
+		display: block;
+		min-height: 250px;
+	}
+
+	.caption {
+		font-size: 0.8em;
+		font-style: italic;
+		text-align: left;
+	}
+
+	.hero-image {
+		width: 100%;
+		max-width: 550px;
+		margin-bottom: 1em;
+	}
+
+	@media (max-width: 1200px) {
+		p {
+			font-size: 1.2em;
+		}
+
+		.hero-image {
+			max-width: 400px;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.home-container {
+			flex-direction: column;
+		}
+
+		.home-copy {
+			flex: 0;
+			padding-bottom: 2em;
+			text-align: center;
+		}
+	}
+</style>

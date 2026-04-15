@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const title = `About — ${SITE_TITLE}`;
+const description = SITE_DESCRIPTION;
+const permalink = `${Astro.site?.href ?? ''}about`;
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current="about">
+	<div class="container">
+		<h1>About</h1>
+		<figure class="about-image">
+			<img src="/assets/about-illustration.webp" alt="Illustration of a notebook" width="330" />
+			<figcaption>
+				Illustration by
+				<a href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6" target="_blank" rel="noopener"
+					>Icons 8</a
+				>
+				from
+				<a href="https://icons8.com/illustrations" target="_blank" rel="noopener">Ouch!</a>
+			</figcaption>
+		</figure>
+		<p>
+			I am Karthik, a software engineer at <a href="https://www.phonepe.com/">PhonePe</a>. Most of my day job
+			revolves around building and operating software at scale, collaborating with strong engineers, and
+			turning fuzzy problems into something shippable.
+		</p>
+		<p>
+			I also spend time on security as a personal interest: reading, experimenting, and thinking about how
+			applications fail in the real world. I am not infallible (no one is), but I try to learn something new
+			whenever I can.
+		</p>
+		<p>
+			If you came here from a post or a link, thanks for reading. The <a href="/blog" data-astro-reload>blog</a> is where I put
+			longer notes; the <a href="/">home page</a> is the short version of who I am.
+		</p>
+	</div>
+</BaseLayout>
+
+<style>
+	.about-image {
+		float: right;
+		margin: -3em -7em 2em 2em;
+		max-width: 300px;
+	}
+
+	.about-image img {
+		border-radius: 8px;
+		margin-bottom: 1.5em;
+	}
+
+	@media (max-width: 1020px) {
+		.about-image {
+			float: none;
+			margin: 0 auto 2em;
+		}
+	}
+</style>

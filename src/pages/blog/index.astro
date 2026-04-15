@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BlogPostList from '../../components/BlogPostList.svelte';
+import BlogSearch from '../../components/BlogSearch.svelte';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const title = `Blog — ${SITE_TITLE}`;
+const description = SITE_DESCRIPTION;
+const permalink = `${Astro.site?.href ?? ''}blog`;
+
+let posts = await getCollection('posts');
+posts = posts.sort(
+	(a, b) => new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf(),
+);
+
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))].sort((a, b) => a.localeCompare(b));
+
+const serializedPosts = posts.map((p) => ({
+	slug: p.data.slug,
+	title: p.data.title,
+	description: p.data.description,
+	publishDate: p.data.publishDate,
+	tags: p.data.tags ?? [],
+}));
+---
+
+<BaseLayout title={title} description={description} permalink={permalink} current="blog">
+	<div class="container">
+		<h1>Blog</h1>
+
+		<BlogSearch client:only="svelte" allPosts={serializedPosts} allTags={allTags} listId="blog-post-list" />
+
+		<BlogPostList client:only="svelte" posts={serializedPosts} allTags={allTags} />
+	</div>
+</BaseLayout>
