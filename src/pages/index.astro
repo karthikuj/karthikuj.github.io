@@ -22,30 +22,22 @@ const permalink = Astro.site?.href ?? '';
 				experiences.
 			</p>
 			<p>
-				This site is for longer notes—mostly engineering, sometimes security-adjacent topics, and
+				This site is for longer notes; mostly security, sometimes engineering-adjacent topics, and
 				whatever I am learning. Browse the <a href="/blog" data-astro-reload>blog</a> or read more <a href="/about">about me</a>.
 			</p>
 		</div>
 
 		<div class="hero-image-container">
 			<picture>
-				<source srcset="/assets/home-illustration.webp" media="(min-width: 600px)" />
+				<source srcset="/assets/security-professional-illustration.png" media="(min-width: 600px)" />
 				<img
 					class="hero-image"
-					alt="Illustration of person reading a book"
-					src="/assets/home-illustration-small.webp"
+					alt="Illustration of a security professional working on a laptop"
+					src="/assets/security-professional-illustration.png"
 					width="550"
 					height="466"
 				/>
 			</picture>
-			<p class="caption">
-				Illustration by
-				<a href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6" target="_blank" rel="noopener"
-					>Icons 8</a
-				>
-				from
-				<a href="https://icons8.com/illustrations" target="_blank" rel="noopener">Ouch!</a>
-			</p>
 		</div>
 	</div>
 </BaseLayout>
@@ -93,7 +85,7 @@ const permalink = Astro.site?.href ?? '';
 
 	.hero-image {
 		width: 100%;
-		max-width: 550px;
+		max-width: 420px;
 		margin-bottom: 1em;
 	}
 
@@ -103,7 +95,7 @@ const permalink = Astro.site?.href ?? '';
 		}
 
 		.hero-image {
-			max-width: 400px;
+			max-width: 360px;
 		}
 	}
 
