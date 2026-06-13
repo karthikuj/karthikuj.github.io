@@ -1,9 +1,9 @@
 ---
-title: Securing a Section of Windows
-slug: securing-a-section-of-windows
+title: "Securing a Section of Windows: Part 1"
+slug: securing-a-section-of-windows-part-1
 publishDate: 06 June 2026
 description: In this post we will go over sections, what they are, different types of sections and how they can be secured.
-tags: ['windows', 'exercises']
+tags: ['windows', 'exercises', 'sections']
 ---
 
 <img
@@ -24,6 +24,7 @@ tags: ['windows', 'exercises']
 - [Exercise 1: Privesc to Write Data to an Anonymous Section](#exercise-1)
 - [Named Sections](#named-sections)
     - [Exercise 2: UAC Split-Token Architecture](#exercise-2)
+- [Wrapping up](#wrapping-up)
 ---
 
 # <a name="what-are-sections"></a>What Are Sections?
@@ -44,11 +45,11 @@ Let's go over both of them.
 
 ## <a name="file-backed-sections"></a>File-backed Sections
 
-When we create a section object, we have the option to pass a handle to a file, if passed, that file will be used as the backend to the memory section, meaning, the data read from the section is the actual data stored in the file and any data written to it will be reflected in the file as well. Using this we can create sections whose data stays persistent even after  the system reboots.
+When we create a section object, we have the option to pass a handle to a file, if passed, that file will be used as the backend to the memory section, meaning, the data read from the section is the actual data stored in the file and any data written to it will be reflected in the file as well. Using this we can create sections whose data stays persistent even after the system reboots.
 
 ## <a name="page-file-backed-sections"></a>Page-file-backed Sections
 
-We learnt that when we pass a handle to a file while creating a section object it acts as a storage for it, but happens when we pass it as `nullptr`? That will end up creating a section that is backed by just memory pages/page-files, on a typical windows installation that is `C:\pagefile.sys`. This means that your data won't persist the reboot.
+We learnt that when we pass a handle to a file while creating a section object it acts as a storage for it, but what happens when we pass it as `nullptr`? That will end up creating a section that is backed by just memory pages/page-files, on a typical windows installation that is `C:\pagefile.sys`. This means that your data won't persist the reboot.
 
 ---
 
@@ -383,5 +384,15 @@ Name       : NT AUTHORITY\LogonSessionId_0_1267266
 Attributes : Mandatory, EnabledByDefault, Enabled, LogonId
 ```
 15. As we can see both the processes have the exact same logon session id and thus have `Full Access` to the section we created.
+
+### The Fix
+
+The fix is again to avoid passing `nullptr` and apply a proper DACL to the section object such that only admins can write to the section and everyone else can only read from the section.
+
+---
+
+# <a name="wrapping-up"></a>Wrapping Up
+
+In this part we saw what sections are, different types of sections, how they are created, how they can be vulnerable and how those vulnerabilities can be fixed. Stay tuned for the next part where we will try out another way of fixing it ✌️. 
 
 ---
