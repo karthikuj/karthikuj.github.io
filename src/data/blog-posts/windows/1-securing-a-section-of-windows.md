@@ -7,7 +7,7 @@ tags: ['windows', 'exercises', 'sections']
 ---
 
 <img
-  src="/assets/blog/exercise-1-securing-sections.png"
+  src="/assets/blog/windows/1-securing-a-section-of-windows/hero.png"
   alt="Illustration of securing sections"
   style="display: block; margin: 0 auto; max-width: 350px; width: 100%; height: auto;"
 />
@@ -29,7 +29,7 @@ tags: ['windows', 'exercises', 'sections']
 
 # <a name="what-are-sections"></a>What Are Sections?
 
-Sections in Windows are sections of memory that processes can share with each other, processes can use this to create sections which have data that can be accessed by other processes in different ways. It could be made it so that only some processes are allowed to write to it while others can read from it.
+Sections in Windows are memory regions that processes can share with each other, processes can use this to create sections which have data that can be accessed by other processes in different ways. It could be made it so that only some processes are allowed to write to it while others can read from it.
 
 Read more: [section objects and views](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/section-objects-and-views)
 
@@ -115,7 +115,7 @@ These are the things Process A will perform:
 5. Open the handle to process B.
 6. Duplicate the section handle to process B with access level as `FILE_MAP_READ` and print the handle number to give to process B.
 7. Wait for process B to privesc and write to the section.
-8. Read from the section to see if proccess B successfully gained write privileges.
+8. Read from the section to see if process B successfully gained write privileges.
 
 **IMPORTANT**: Try implementing this yourself before moving onto the source code.
 
@@ -288,7 +288,7 @@ In this exercise we will check the security descriptor applied to the section ob
 1. Start Process A as administrator and Process B as a normal user.
 2. Open [*System Informer*](https://systeminformer.com/downloads) and double click both Process A and B.
 3. Click on the `Handles` tab in Process A's window.
-![proccess-a-handles](/assets/blog/windows/1-securing-a-section-of-windows/process-a-handles.png)
+![process-a-handles](/assets/blog/windows/1-securing-a-section-of-windows/process-a-handles.png)
 4. Notice that there is a section called `CSection` (I named my section the CSection), which has `Query, Map read, Map write, Delete, Read control, Write DAC, Write owner` as `Granted access`.
 5. There won't be any such handle in Process B's handle list as of now because Process A has not duplicated the handle and given it to Process B yet.
 6. Let's continue and give Process B's pid to Process A and then stop.
@@ -384,6 +384,70 @@ Name       : NT AUTHORITY\LogonSessionId_0_1267266
 Attributes : Mandatory, EnabledByDefault, Enabled, LogonId
 ```
 15. As we can see both the processes have the exact same logon session id and thus have `Full Access` to the section we created.
+
+### What's Really Happening?
+
+We saw that how our user was able to get the write access but we never saw from where the section object got those DACLs, lets's dig some more.
+
+1. Let's check the default DACL associated with the admin's token.
+```powershell
+PS C:\Users\5up3r541y4n> $aToken = Get-NtToken -Primary
+PS C:\Users\5up3r541y4n> $aToken.DefaultDacl
+
+Type    User                                  Flags Mask
+----    ----                                  ----- ----
+Allowed BUILTIN\Administrators                None  10000000
+Allowed NT AUTHORITY\SYSTEM                   None  10000000
+Allowed NT AUTHORITY\LogonSessionId_0_1267266 None  A0000000
+```
+2. We got 3 DACLs, but we are interested in the last one, the one which has the mask of `A0000000`, this applies to the current logon session, let's try decoding this.
+```powershell
+PS C:\Users\5up3r541y4n> Get-NtAccessMask -SectionAccess 0xA0000000 -MapGenericRights -AsSpecificAccess Section
+Query, MapRead, MapExecute, ReadControl
+```
+3. As we can see the logon session id's access mask only has `MapRead` and `MapExecute` access rights.
+4. Now let's checkout the DACLs associated with the directory where our section object is stored.
+```powershell
+PS C:\Users\5up3r541y4n> $dir = Get-NtDirectory \Sessions\1\BaseNamedObjects
+PS C:\Users\5up3r541y4n> $dir.SecurityDescriptor.Dacl
+
+Type    User                                 Flags                                        Mask
+----    ----                                 -----                                        ----
+Allowed Window Manager\DWM-1                 None                                         000F000F
+Allowed NT AUTHORITY\SYSTEM                  None                                         000F000F
+Allowed NT AUTHORITY\SYSTEM                  ObjectInherit, ContainerInherit, InheritOnly 10000000
+Allowed CREATOR OWNER                        ObjectInherit, ContainerInherit, InheritOnly 10000000
+Allowed DESKTOP-DVS196L\5up3r541y4n          None                                         000F000F
+Allowed NT AUTHORITY\LogonSessionId_0_426054 ObjectInherit, ContainerInherit, InheritOnly 10000000
+Allowed NT AUTHORITY\LogonSessionId_0_426054 None                                         0002000F
+Allowed BUILTIN\Administrators               None                                         0002000F
+Allowed Everyone                             ContainerInherit                             00000003
+Allowed NT AUTHORITY\RESTRICTED              None                                         00000002
+```
+5. Here we can see that the logon session id has a flag called `ObjectInherit` and a mask of `10000000`, what this means is that any child leaf objects inside this directory will inherit this ACL. Now let's find out what `10000000` maps to.
+```powershell
+PS C:\Users\5up3r541y4n> Get-NtAccessMask -SectionAccess 0x10000000 -MapGenericRights -AsTypeAccess Section
+Query, MapWrite, MapRead, MapExecute, ExtendSize, Delete, ReadControl, WriteDac, WriteOwner
+
+PS C:\Users\5up3r541y4n> Get-NtAccessMask -SectionAccess 0x10000000 -MapGenericRights
+
+Access
+------
+000F001F
+```
+6. This one also has `MapWrite` along with the `MapRead` and `MapExecute` access rights, which proves that the section object inherits the ACL which had the `ObjectInherit` flag in the local session's `BaseNamedObjects` directory.
+7. Now let's checkout the DACLs of the section object. **Note: I restarted my laptop in between (and renamed the section) so the section name and logon session id will be different.**
+```powershell
+PS C:\Users\5up3r541y4n> $sec = Get-NtSection \Sessions\1\BaseNamedObjects\NoSecurityAttributes
+PS C:\Users\5up3r541y4n> $sec.SecurityDescriptor.Dacl
+
+Type    User                                 Flags Mask
+----    ----                                 ----- ----
+Allowed NT AUTHORITY\SYSTEM                  None  000F001F
+Allowed BUILTIN\Administrators               None  000F001F
+Allowed NT AUTHORITY\LogonSessionId_0_426054 None  000F001F
+```
+8. Tada! The mask is the same as the one we calculated in the earlier command.
 
 ### The Fix
 
