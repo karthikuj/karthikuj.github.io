@@ -10,7 +10,7 @@ const description = SITE_DESCRIPTION;
 const permalink = `${Astro.site?.href ?? ''}blog`;
 
 let posts = await getCollection('posts');
-posts = posts.sort(
+posts = posts.filter((p) => !p.data.draft).sort(
 	(a, b) => new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf(),
 );
 

@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Bio from '../../components/Bio.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts');
+	const posts = (await getCollection('posts')).filter((p) => !p.data.draft);
 	return posts.map((p) => ({
 		params: { slug: p.data.slug },
 		props: { post: p },

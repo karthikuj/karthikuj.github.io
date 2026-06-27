@@ -27,6 +27,8 @@ tags: ['windows', 'exercises', 'sections']
 - [Wrapping up](#wrapping-up)
 ---
 
+> **Note:** I restarted my laptop and renamed the section between runs, so the section name and logon session IDs might differ from run to run.
+
 # <a name="what-are-sections"></a>What Are Sections?
 
 Sections in Windows are memory regions that processes can share with each other, processes can use this to create sections which have data that can be accessed by other processes in different ways. It could be made it so that only some processes are allowed to write to it while others can read from it.
@@ -361,7 +363,7 @@ SystemAcl        : {}
 RawDescriptor    : System.Security.AccessControl.CommonSecurityDescriptor
 ```
 13. As you can see, the section had three DACL ACEs, first and second one gave `Full Access` to `NT AUTHORITY\SYSTEM` and `BUILTIN\Administrators` respectively, and the third one gave `Full Access` to any process which has `LogonSessionId_0_1267266` as the logon session.
-14. Next, let's check the logon session id for both processes.
+14. Next, let's check the logon session ID for both processes.
 ```powershell
 PS C:\Users\5up3r541y4n> $admin_p = Get-NtProcess -ProcessId 7592
 PS C:\Users\5up3r541y4n> $user_p = Get-NtProcess -ProcessId 13964
@@ -383,7 +385,7 @@ Sid        : S-1-5-5-0-1267266
 Name       : NT AUTHORITY\LogonSessionId_0_1267266
 Attributes : Mandatory, EnabledByDefault, Enabled, LogonId
 ```
-15. As we can see both the processes have the exact same logon session id and thus have `Full Access` to the section we created.
+15. As we can see both the processes have the exact same logon session ID and thus have `Full Access` to the section we created.
 
 ### What's Really Happening?
 
@@ -405,7 +407,7 @@ Allowed NT AUTHORITY\LogonSessionId_0_1267266 None  A0000000
 PS C:\Users\5up3r541y4n> Get-NtAccessMask -SectionAccess 0xA0000000 -MapGenericRights -AsSpecificAccess Section
 Query, MapRead, MapExecute, ReadControl
 ```
-3. As we can see the logon session id's access mask only has `MapRead` and `MapExecute` access rights.
+3. As we can see the logon session ID's access mask only has `MapRead` and `MapExecute` access rights.
 4. Now let's checkout the DACLs associated with the directory where our section object is stored.
 ```powershell
 PS C:\Users\5up3r541y4n> $dir = Get-NtDirectory \Sessions\1\BaseNamedObjects
@@ -424,7 +426,7 @@ Allowed BUILTIN\Administrators               None                               
 Allowed Everyone                             ContainerInherit                             00000003
 Allowed NT AUTHORITY\RESTRICTED              None                                         00000002
 ```
-5. Here we can see that the logon session id has a flag called `ObjectInherit` and a mask of `10000000`, what this means is that any child leaf objects inside this directory will inherit this ACL. Now let's find out what `10000000` maps to.
+5. Here we can see that the logon session ID has a flag called `ObjectInherit` and a mask of `10000000`, what this means is that any child leaf objects inside this directory will inherit this ACL. Now let's find out what `10000000` maps to.
 ```powershell
 PS C:\Users\5up3r541y4n> Get-NtAccessMask -SectionAccess 0x10000000 -MapGenericRights -AsTypeAccess Section
 Query, MapWrite, MapRead, MapExecute, ExtendSize, Delete, ReadControl, WriteDac, WriteOwner
@@ -436,7 +438,7 @@ Access
 000F001F
 ```
 6. This one also has `MapWrite` along with the `MapRead` and `MapExecute` access rights, which proves that the section object inherits the ACL which had the `ObjectInherit` flag in the local session's `BaseNamedObjects` directory.
-7. Now let's checkout the DACLs of the section object. **Note: I restarted my laptop in between (and renamed the section) so the section name and logon session id will be different.**
+7. Now let's checkout the DACLs of the section object.
 ```powershell
 PS C:\Users\5up3r541y4n> $sec = Get-NtSection \Sessions\1\BaseNamedObjects\NoSecurityAttributes
 PS C:\Users\5up3r541y4n> $sec.SecurityDescriptor.Dacl
