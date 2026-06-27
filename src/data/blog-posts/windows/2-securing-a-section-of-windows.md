@@ -1,7 +1,7 @@
 ---
 title: "Securing a Section of Windows: Part 2"
 slug: securing-a-section-of-windows-part-2
-publishDate: 21 June 2026
+publishDate: 28 June 2026
 draft: true
 description: In this post we will learn some other ways in which sections can be secured and some other ways they can be exploited.
 tags: ['windows', 'exercises', 'sections']
@@ -24,7 +24,7 @@ tags: ['windows', 'exercises', 'sections']
 
 # <a name="recap"></a>Recap?
 
-In the [last part](https://karthikuj.github.io/blog/securing-a-section-of-windows-part-1/) we learnt what sections are, how they are made, and how they can be insecure if not created properly. If you don't know any of it please go back and read the [previous blog](https://karthikuj.github.io/blog/securing-a-section-of-windows-part-1/) first because we will be building up on that knowledge in this one. 
+In the [last part](https://karthikuj.github.io/blog/securing-a-section-of-windows-part-1/) we learnt what sections are, how they are made, and how they can be insecure if not created properly. If you don't know any of it, please go back and read the [previous blog](https://karthikuj.github.io/blog/securing-a-section-of-windows-part-1/) first because we will be building up on that knowledge in this one. 
 
 ---
 

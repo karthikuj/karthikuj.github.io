@@ -1,7 +1,7 @@
 ---
 title: "Securing a Section of Windows: Part 1"
 slug: securing-a-section-of-windows-part-1
-publishDate: 06 June 2026
+publishDate: 28 June 2026
 description: In this post we will go over sections, what they are, different types of sections and how they can be secured.
 tags: ['windows', 'exercises', 'sections']
 ---
@@ -113,7 +113,7 @@ These are the things Process A will perform:
 1. Create an anonymous (unnamed) section with `PAGE_READWRITE` page protection.
 2. Map it as `FILE_MAP_ALL_ACCESS`.
 3. Write some data to it.
-4. Get the pid for process B from standard input.
+4. Get the PID for process B from standard input.
 5. Open the handle to process B.
 6. Duplicate the section handle to process B with access level as `FILE_MAP_READ` and print the handle number to give to process B.
 7. Wait for process B to privesc and write to the section.
@@ -156,7 +156,7 @@ int main() {
     memcpy(buffer, pMapView, sizeof(buffer));
     // std::cout << "Data read from the section: " << buffer << std::endl;
 
-    // step 5: get the low privileged process pid from user input
+    // step 5: get the low privileged process PID from user input
     DWORD dwPid;
     std::cout << "\nEnter the PID of the low privileged process: ";
     std::cin >> dwPid;
@@ -198,7 +198,7 @@ int main() {
 ## Process B (Lesser Privileged)
 
 These are the tasks to be performed by Process B:
-1. Print the pid of the process that we can give to process A.
+1. Print the PID of the process that we can give to process A.
 2. Take the duplicated handle we got from process A through user input.
 3. Duplicate the handle once again to get write privileges as well.
 4. Map the duplicated handle to the current process.
@@ -279,7 +279,7 @@ Now you might think that giving the section a name will fix all this, that was t
 
 Try to modify the source code of *Process A* to give the section a name and try the exercise again to see if that works. I am waiting...
 
-Unexpectedly, the exploit still works, why? This is because of something called the *UAC split-token*, when we run powershell *as an administrator*, the Windows UAC creates two access tokens for your session, first is the one that you were using till now for every normal process including the less privileged *Process B* and the elevated one that powershell will be using now along with the privileged *Process A* when we invoke that from the elevated powershell. Even though the two tokens are different in the sense that one is privileged and the other is not, they still belong to the same user and to the same logon session and when no security attributes are specified at the time of creation of the section, Windows by default grants `GENERIC_ALL` to the owner and the current logon session.
+Unexpectedly, the exploit still works, why? This is because of something called the *UAC split-token*, when we run PowerShell *as an administrator*, the Windows UAC creates two access tokens for your session, first is the one that you were using till now for every normal process including the less privileged *Process B* and the elevated one that PowerShell will be using now along with the privileged *Process A* when we invoke that from the elevated PowerShell. Even though the two tokens are different in the sense that one is privileged and the other is not, they still belong to the same user and to the same logon session and when no security attributes are specified at the time of creation of the section, Windows by default grants `GENERIC_ALL` to the owner and the current logon session.
 
 Which means when the lesser privileged process duplicates the handle and asks for `FILE_MAP_WRITE` as well, the Security Reference Monitor (SRM) checks the DACLs on the section object and sees that the owner of the section with the current logon session is allowed to do almost anything so it grants the required access.
 
@@ -293,7 +293,7 @@ In this exercise we will check the security descriptor applied to the section ob
 ![process-a-handles](/assets/blog/windows/1-securing-a-section-of-windows/process-a-handles.png)
 4. Notice that there is a section called `CSection` (I named my section the CSection), which has `Query, Map read, Map write, Delete, Read control, Write DAC, Write owner` as `Granted access`.
 5. There won't be any such handle in Process B's handle list as of now because Process A has not duplicated the handle and given it to Process B yet.
-6. Let's continue and give Process B's pid to Process A and then stop.
+6. Let's continue and give Process B's PID to Process A and then stop.
 7. Now, once Process A has given the read-only handle to Process B, we should be able to see the handle in Process B's handle list.
 ![Process B Handles: 1](/assets/blog/windows/1-securing-a-section-of-windows/process-b-handles-1.png)
 8. As you can see there is a handle to the section with `Map read` as the granted access.
@@ -389,7 +389,7 @@ Attributes : Mandatory, EnabledByDefault, Enabled, LogonId
 
 ### What's Really Happening?
 
-We saw that how our user was able to get the write access but we never saw from where the section object got those DACLs, lets's dig some more.
+We saw that how our user was able to get the write access but we never saw from where the section object got those DACLs, let's dig some more.
 
 1. Let's check the default DACL associated with the admin's token.
 ```powershell
