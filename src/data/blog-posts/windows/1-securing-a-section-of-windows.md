@@ -1,7 +1,7 @@
 ---
 title: "Securing a Section of Windows: Part 1"
 slug: securing-a-section-of-windows-part-1
-publishDate: 28 June 2026
+publishDate: 21 June 2026
 description: In this post we will go over sections, what they are, different types of sections and how they can be secured.
 tags: ['windows', 'exercises', 'sections']
 ---

@@ -2,7 +2,7 @@
 title: "Securing a Section of Windows: Part 2"
 slug: securing-a-section-of-windows-part-2
 publishDate: 28 June 2026
-draft: true
+# draft: true
 description: In this post we will learn some other ways in which sections can be secured and some other ways they can be exploited.
 tags: ['windows', 'exercises', 'sections']
 ---
@@ -18,9 +18,11 @@ tags: ['windows', 'exercises', 'sections']
 - [Recap](#recap)
 - [The Global Namespace](#the-global-namespace)
     - [Exercise 1: DACL Inheritance](#exercise-1)
-- [Name Squatting](#name-squatting)
 - [SYSTEM Process](#system-process)
+- [Name Squatting](#name-squatting)
 ---
+
+> **Note:** I restarted my laptop and renamed the section between runs, so the section name and logon session IDs might differ from run to run.
 
 # <a name="recap"></a>Recap?
 
@@ -107,8 +109,82 @@ Spot on! The section object's last DACL which allows anyone with that logon sess
 
 ---
 
+# <a name="system-processes"></a>SYSTEM Processes
+
+All the exercises we have done till now and the sections we created had one thing in common, they were all accessible in some way or the other by the members of the same logon session ID; but what happens when the logon session ID is different or let's the section was created by a SYSTEM process? Let's test this out next.
+
+1. First we will re-compile our code to create a named section object called **"NoSecurityAttributes"** (notice that there is no **Global\\** prefix), and now we will run it using `PsExec.exe` (This is a pert of the SysInternals suite of tools, install it if you haven't already).
+```powershell
+PS C:\Users\5up3r541y4n\Hack\security-exercises> C:\Users\5up3r541y4n\Hack\SysinternalsSuite\PsExec.exe -s C:\Users\5up3r541y4n\Hack\security-exercises\windows\exercise-1-securing-sections\named\privileged.exe
+
+PsExec v2.43 - Execute processes remotely
+Copyright (C) 2001-2023 Mark Russinovich
+Sysinternals - www.sysinternals.com
+
+Starting C:\Users\5up3r541y4n\Hack\security-exercises\windows\exercise-1-securing-sections\named\privileged.exe on DESKT
+Named sections created successfully!
+Enter any key to exit...
+```
+
+2. Now let's open `WibObj.exe` as administrator and check out the section we created.
+![WinObj Search Results For NoSecurityAttributes](/assets/blog/windows/2-securing-a-section-of-windows/winobj-search-results-for-nosecurityattributes-section.png)
+
+3. We can see that the section object is created under the global namespace `\BaseNamedObjects\` for SYSTEM processes, but who all can access it? Let's try to deduce that.
+
+4. We know from our previous exercise that this directory does not have any inheritable rules, so the created section object must be using the default DACL for the SYSTEM user's token.
+```powershell
+PS C:\WINDOWS\system32> $sysToken = Get-NtToken -Primary
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> $sysToken.DefaultDacl
+ssoenefutal
+Type    User                   Flags Mask
+----    ----                   ----- ----
+Allowed NT AUTHORITY\SYSTEM    None  10000000
+Allowed BUILTIN\Administrators None  A0020000
+```
+
+5. As we can see there is no DACL for any logon session ID, only `NT AUTHORITY\SYSTEM` and `BUILTIN\Administrators` should be able to access the section object in some way. Let's decode admin's access mask next to get the specific access mask.
+```powershell
+PS C:\WINDOWS\system32> Get-NtAccessMask -SectionAccess 0xA0020000 -MapGenericRights
+
+Access
+------
+0002000D
+``` 
+
+6. The above output tells us that the Administrator will have the specific access mask of `0002000D` for the section object, let's verify that.
+```powershell
+PS C:\WINDOWS\system32>  $sysSection = Get-NtSection \BaseNamedObjects\NoSecurityAttributes
+PS C:\WINDOWS\system32>
+
+PS C:\WINDOWS\system32> $sysSection.SecurityDescriptor.Dacl
+Type    User                   Flags Mask
+----    ----                   ----- ----
+Allowed NT AUTHORITY\SYSTEM    None  000F001F
+Allowed BUILTIN\Administrators None  0002000D
+```
+
+7. Bingo again! The output matches exactly what we deduced. And for a final attempt let's try to access this section as a normal user, we should get access denied.
+```powershell
+PS C:\Users\5up3r541y4n\Hack\security-exercises> $sysSection = Get-NtSection \BaseNamedObjects\NoSecurityAttributes
+Get-NtSection : (0xC0000022) - {Access Denied}
+A process has requested access to an object, but has not been granted those access rights.
+At line:1 char:15
++ $sysSection = Get-NtSection \BaseNamedObjects\NoSecurityAttributes
++               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Get-NtSection], NtException
+    + FullyQualifiedErrorId : NtCoreLib.NtException,NtObjectManager.Cmdlets.Object.GetNtSectionCmdlet
+
+PS C:\Users\5up3r541y4n\Hack\security-exercises>
+```
+
+8. As expected, we got `Access Denied`.
+
+---
+
 # <a name="name-squatting"></a>Name Squatting
 
 https://www.exploit-db.com/docs/english/15672-escaping-from-microsoft%E2%80%99s-protected-mode-internet-explorer.pdf
+https://invisiblethingslab.com/resources/2014/A%20crack%20on%20the%20glass.pdf
 
 ---
