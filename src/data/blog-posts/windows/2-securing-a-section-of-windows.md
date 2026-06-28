@@ -2,7 +2,7 @@
 title: "Securing a Section of Windows: Part 2"
 slug: securing-a-section-of-windows-part-2
 publishDate: 28 June 2026
-# draft: true
+draft: true
 description: In this post we will learn some other ways in which sections can be secured and some other ways they can be exploited.
 tags: ['windows', 'exercises', 'sections']
 ---
