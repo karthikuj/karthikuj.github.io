@@ -224,6 +224,7 @@ const nextPart = d.part ? series.find((p) => p.data.part === d.part! + 1) : unde
 
 	.plate-figure {
 		margin: 0;
+		background: var(--sketch-paper);
 		padding: 1.5rem 1.75rem 1rem;
 		border-right: 1px solid var(--rule);
 		display: flex;
@@ -241,11 +242,11 @@ const nextPart = d.part ? series.find((p) => p.data.part === d.part! + 1) : unde
 	.plate-figure figcaption {
 		font-family: var(--font-frame);
 		font-size: 0.8125rem;
-		color: var(--pencil);
+		color: color-mix(in srgb, var(--sketch-ink) 68%, var(--sketch-paper));
 	}
 
 	.plate-figure figcaption b {
-		color: var(--ink);
+		color: var(--sketch-ink);
 		margin-right: 0.45em;
 	}
 

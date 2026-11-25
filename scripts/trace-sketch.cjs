@@ -39,8 +39,21 @@ const pathData = (svg) =>
 	const src = await Jimp.read(input);
 	const { width: W, height: H } = src.bitmap;
 
-	// Background = transparent, chroma green, or near-white paper. Luminance comes from red and blue,
-	// because green spill on anti-aliased edges inflates the green channel.
+	// Background = transparent or chroma green. Near-white counts as background only when the image itself
+	// is on white paper (judged from its border); on a green image, white is the drawing's own surfaces
+	// (faces, screens, coats) and must stay in the paper layer, or they show through as holes.
+	// Luminance comes from red and blue, because green spill on anti-aliased edges inflates the green channel.
+	const px = (x, y) => {
+		const i = (y * W + x) * 4;
+		const d = src.bitmap.data;
+		return [d[i], d[i + 1], d[i + 2], d[i + 3]];
+	};
+	let border = 0, greenBorder = 0;
+	for (let x = 0; x < W; x += 4) for (const y of [0, H - 1]) { const [r, g, b] = px(x, y); border++; if (g - Math.max(r, b) > 70) greenBorder++; }
+	for (let y = 0; y < H; y += 4) for (const x of [0, W - 1]) { const [r, g, b] = px(x, y); border++; if (g - Math.max(r, b) > 70) greenBorder++; }
+	const whitePaper = greenBorder / border < 0.5;
+	console.log(`background: ${whitePaper ? 'white paper' : 'chroma green'}`);
+
 	const isBg = new Uint8Array(W * H);
 	const lum = new Uint8Array(W * H);
 	src.scan(0, 0, W, H, function (x, y, i) {
@@ -48,7 +61,7 @@ const pathData = (svg) =>
 		const r = d[i], g = d[i + 1], b = d[i + 2], a = d[i + 3];
 		const k = y * W + x;
 		const l = Math.round((r + b) / 2);
-		isBg[k] = a < 32 || g - Math.max(r, b) > 70 || (l > 245 && g > 245) ? 1 : 0;
+		isBg[k] = a < 32 || g - Math.max(r, b) > 70 || (whitePaper && l > 245 && g > 245) ? 1 : 0;
 		lum[k] = l;
 	});
 

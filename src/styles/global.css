@@ -44,6 +44,18 @@
   color-scheme: dark;
 }
 
+/* Sketch colours. By day they match the sheet and ink. At night sketches stay printed plates
+   (dark pencil on dimmed paper) rather than inverting into a photographic negative. */
+:root {
+  --sketch-paper: var(--sheet);
+  --sketch-ink: var(--ink);
+}
+
+:root.theme-dark {
+  --sketch-paper: #d6d2c9;
+  --sketch-ink: #1d1f1e;
+}
+
 [data-section='writing'] { --dye: var(--writing); }
 [data-section='projects'] { --dye: var(--projects); }
 [data-section='research'] { --dye: var(--research); }

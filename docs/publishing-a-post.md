@@ -205,8 +205,8 @@ Crop screenshots to the part that matters. PNG is fine for tool screenshots.
 ## 7. The plate illustration
 
 Every post opens with a **plate**: a pencil sketch with hatched shading, mounted next to the specimen
-label. Sketches are stored as SVG layers that use the theme's colours, so the same file looks like
-graphite on white in light mode and chalk on graphite in dark mode.
+label. Sketches are stored as SVG layers that use the theme's colours: graphite on white in light mode,
+and dark pencil on dimmed paper in dark mode, so a sketch never looks like a photo negative.
 
 There are three steps: ask an image AI for a sketch, give it to Claude (or trace it yourself), and set
 it in the front matter.
@@ -317,8 +317,10 @@ How it works: the tracer splits the drawing into three layers.
 - **Tone:** pixels darker than luminance 190 (the hatching), drawn in ink at 34% opacity.
 - **Ink:** pixels darker than 105 (the line work), drawn in full ink.
 
-The site paints each layer through a CSS mask in the current theme's colours, so it never needs a
-separate dark version.
+The site paints each layer through a CSS mask using the sketch colours (`--sketch-paper` and
+`--sketch-ink` in `src/styles/global.css`), so it never needs a separate dark version. The tracer
+detects whether the image's background is green or white from its border; on green, white surfaces
+inside the drawing stay solid paper.
 
 ---
 

@@ -8,7 +8,8 @@ The site is a static [Astro](https://astro.build) build deployed to GitHub Pages
 
 **Writing a new post?** Read [`docs/publishing-a-post.md`](docs/publishing-a-post.md). It covers
 everything from notes to the live page, including the image-AI prompts for plate sketches. Plan posts
-in [`notes/`](notes/), which is never published.
+in [`notes/`](notes/), which is never published. Notable changes are recorded in
+[`CHANGELOG.md`](CHANGELOG.md).
 
 ## Commands
 
