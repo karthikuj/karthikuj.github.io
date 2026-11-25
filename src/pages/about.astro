@@ -1,59 +1,88 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SpecimenLabel from '../components/SpecimenLabel.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const title = `About — ${SITE_TITLE}`;
 const description = SITE_DESCRIPTION;
-const permalink = `${Astro.site?.href ?? ''}about`;
+const permalink = new URL('/about/', Astro.site ?? Astro.url).href;
 ---
 
 <BaseLayout title={title} description={description} permalink={permalink} current="about">
-	<div class="container">
-		<h1>About</h1>
-		<figure class="about-image">
-			<img src="/assets/about-illustration.webp" alt="Illustration of a notebook" width="330" />
-			<figcaption>
-				Illustration by
-				<a href="https://icons8.com/illustrations/author/5c07e68d82bcbc0092519bb6" target="_blank" rel="noopener"
-					>Icons 8</a
-				>
-				from
-				<a href="https://icons8.com/illustrations" target="_blank" rel="noopener">Ouch!</a>
-			</figcaption>
-		</figure>
-		<p>
-			I am Karthik, a software engineer at <a href="https://www.phonepe.com/">PhonePe</a>. Most of my day job
-			revolves around building and operating software at scale, collaborating with strong engineers, and
-			turning fuzzy problems into something shippable.
-		</p>
-		<p>
-			I also spend time on security as a personal interest: reading, experimenting, and thinking about how
-			applications fail in the real world. I am not infallible (no one is), but I try to learn something new
-			whenever I can.
-		</p>
-		<p>
-			If you came here from a post or a link, thanks for reading. The <a href="/blog" data-astro-reload>blog</a> is where I put
-			longer notes; the <a href="/">home page</a> is the short version of who I am.
-		</p>
+	<h1 class="page-title">About</h1>
+	<div class="about">
+		<div class="collector">
+			<figure class="portrait">
+				<img src="/assets/profile-pic.webp" alt="Portrait of Karthik" width="320" height="320" />
+			</figure>
+			<SpecimenLabel
+				left="The collector"
+				rows={[
+					{ key: 'Name', value: 'Karthik' },
+					{ key: 'Role', value: 'Software engineer at PhonePe' },
+					{ key: 'Interest', value: 'Security, currently Windows security' },
+				]}
+			>
+				<dt class="label-key">Elsewhere</dt>
+				<dd><a href="https://github.com/karthikuj" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a></dd>
+			</SpecimenLabel>
+		</div>
+
+		<div class="prose about-text">
+			<p>
+				I am Karthik, a software engineer at <a href="https://www.phonepe.com/" rel="noopener">PhonePe</a>. Most of my day job
+				revolves around building and operating software at scale, collaborating with strong engineers, and turning fuzzy
+				problems into something shippable.
+			</p>
+			<p>
+				I also spend time on security as a personal interest: reading, experimenting, and thinking about how applications
+				fail in the real world. I am not infallible (no one is), but I try to learn something new whenever I can.
+			</p>
+			<p>
+				If you came here from a post or a link, thanks for reading. <a href="/blog/">Writing</a> holds the long-form notes,
+				<a href="/projects/">Projects</a> the tools I build, and <a href="/research/">Research</a> my vulnerability research.
+			</p>
+		</div>
 	</div>
 </BaseLayout>
 
 <style>
-	.about-image {
-		float: right;
-		margin: -3em -7em 2em 2em;
-		max-width: 300px;
+	.about {
+		display: grid;
+		grid-template-columns: 320px minmax(0, 1fr);
+		gap: 4rem;
+		margin-top: 2.5rem;
+		align-items: start;
 	}
 
-	.about-image img {
-		border-radius: 8px;
-		margin-bottom: 1.5em;
+	.portrait {
+		margin: 0;
+		background: var(--sheet);
+		border: 1px solid var(--rule);
+		border-bottom: 0;
+		padding: 1rem;
 	}
 
-	@media (max-width: 1020px) {
-		.about-image {
-			float: none;
-			margin: 0 auto 2em;
+	.portrait img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: 2px;
+	}
+
+	.about-text {
+		font-size: 1.1875rem;
+	}
+
+	@media (max-width: 860px) {
+		.about {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2.5rem;
+		}
+
+		.collector {
+			max-width: 360px;
 		}
 	}
 </style>

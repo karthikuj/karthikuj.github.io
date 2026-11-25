@@ -4,28 +4,16 @@ slug: securing-a-section-of-windows-part-1
 publishDate: 21 June 2026
 description: In this post we will go over sections, what they are, different types of sections and how they can be secured.
 tags: ['windows', 'exercises', 'sections']
+section: writing
+series: Securing a Section of Windows
+part: 1
+object: Section (anonymous)
+family: Memory manager
+sketch: section-secured
+heroCaption: A section object holding its memory pages, locked against unwanted writers
+heroAlt: A section object drawn as a filing block holding a stack of memory pages, with a padlock attached and callouts for "Secured" and "Memory section object".
 ---
 
-<img
-  src="/assets/blog/windows/1-securing-a-section-of-windows/hero.png"
-  alt="Illustration of securing sections"
-  style="display: block; margin: 0 auto; max-width: 350px; width: 100%; height: auto;"
-/>
-
-## <a name="top"></a> Table of Contents
-
-- [What Are Sections?](#what-are-sections)
-- [Types of Sections](#types-of-sections)
-  - [File-backed Sections](#file-backed-sections)
-  - [Page-file-backed Sections](#page-file-backed-sections)
-- [How to Create a Section](#how-to-create-a-section)
-  - [CreateFileMappingW](#createfilemappingw)
-  - [NtCreateSectionEx](#ntcreatesectionex)
-- [Exercise 1: Privesc to Write Data to an Anonymous Section](#exercise-1)
-- [Named Sections](#named-sections)
-    - [Exercise 2: UAC Split-Token Architecture](#exercise-2)
-- [Wrapping up](#wrapping-up)
----
 
 > **Note:** I restarted my laptop and renamed the section between runs, so the section name and logon session IDs might differ from run to run.
 

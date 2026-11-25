@@ -6,7 +6,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sketch": "node scripts/trace-sketch.cjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.0",
@@ -19,5 +20,8 @@
     "rehype-external-links": "^3.0.0",
     "remark-gfm": "^4.0.0",
     "remark-smartypants": "^2.0.0"
+  },
+  "devDependencies": {
+    "potrace": "^2.1.8"
   }
 }

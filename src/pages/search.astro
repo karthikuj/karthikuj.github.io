@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EntryIndex from '../components/EntryIndex.astro';
+import { getEntries } from '../lib/entries';
+
+const items = await getEntries();
+const permalink = new URL('/search/', Astro.site ?? Astro.url).href;
+---
+
+<BaseLayout title="Search — Karthik's blog" description="Search writing, projects and research." permalink={permalink} current="search">
+	<h1 class="page-title">Search</h1>
+	<p class="dek">Find a plate across writing, projects and research by title, object, family or tag.</p>
+	<EntryIndex items={items} emptyText="Nothing has been published yet." searchLabel="Search every section" autofocus />
+</BaseLayout>
+
+<style>
+	.dek {
+		margin-top: 1rem;
+	}
+</style>

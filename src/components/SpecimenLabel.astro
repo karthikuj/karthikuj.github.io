@@ -1,0 +1,77 @@
+---
+// A ruled specimen label: a header row over a 2px ink rule, then key/value rows.
+// Extra rows can be passed as children: <dt class="label-key">Key</dt><dd>…</dd>
+export interface Props {
+	left: string;
+	right?: string;
+	rows?: { key: string; value?: string | null }[];
+	class?: string;
+}
+
+const { left, right, rows = [], class: className } = Astro.props;
+const visible = rows.filter((r) => r.value);
+---
+
+<div class:list={['specimen', className]}>
+	<div class="specimen-head">
+		<span>{left}</span>
+		{right && <span>{right}</span>}
+	</div>
+	<dl>
+		{
+			visible.map((r) => (
+				<>
+					<dt class="label-key">{r.key}</dt>
+					<dd>{r.value}</dd>
+				</>
+			))
+		}
+		<slot />
+	</dl>
+</div>
+
+<style>
+	.specimen {
+		background: var(--sheet);
+		border: 1px solid var(--rule);
+		padding: 1rem 1.1rem 1.1rem;
+		font-family: var(--font-frame);
+		font-size: 0.875rem;
+	}
+
+	.specimen-head {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-bottom: 0.5rem;
+		margin-bottom: 0.75rem;
+		border-bottom: 2px solid var(--ink);
+		font-weight: 800;
+		font-stretch: 112%;
+		font-size: 0.9375rem;
+	}
+
+	dl {
+		display: grid;
+		grid-template-columns: 5.5rem minmax(0, 1fr);
+		gap: 0.55rem 0.75rem;
+		margin: 0;
+	}
+
+	dl :global(dt) {
+		padding-top: 0.2em;
+	}
+
+	dl :global(dd) {
+		margin: 0;
+		font-weight: 500;
+		line-height: 1.4;
+		min-width: 0;
+	}
+
+	dl :global(.tags) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem;
+	}
+</style>

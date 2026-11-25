@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import { SITE_TITLE } from '../consts';
 import '../styles/fonts.css';
 import '../styles/global.css';
@@ -8,18 +7,24 @@ export interface Props {
 	title: string;
 	description: string;
 	permalink: string;
+	image?: string;
 }
 
-const { title, description, permalink } = Astro.props;
-const socialUrl = (Astro.site?.href ?? '') + 'assets/social.png';
+const { title, description, permalink, image } = Astro.props;
+const socialUrl = new URL(image ?? '/assets/social.png', Astro.site ?? Astro.url).href;
 const rssHref = Astro.site ? new URL('rss.xml', Astro.site).href : '/rss.xml';
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={rssHref} />
+<link rel="canonical" href={permalink} />
+<link rel="preload" href="/assets/fonts/archivo-wdth-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fonts/literata-latin.woff2" as="font" type="font/woff2" crossorigin />
+<meta name="theme-color" content="#f4f6f3" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1d1f1e" media="(prefers-color-scheme: dark)" />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -40,18 +45,14 @@ const rssHref = Astro.site ? new URL('rss.xml', Astro.site).href : '/rss.xml';
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialUrl} />
 
-<ClientRouter />
-
-<!-- This is intentionally inlined to avoid FOUC -->
+<!-- Inlined so the theme is applied before first paint -->
 <script is:inline>
-  const root = document.documentElement
-  const theme = localStorage.getItem('theme')
-  if (
-    theme === 'dark' ||
-    (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-  ) {
-    root.classList.add('theme-dark')
-  } else {
-    root.classList.remove('theme-dark')
-  }
+	(function () {
+		var theme = null;
+		try {
+			theme = localStorage.getItem('theme');
+		} catch (e) {}
+		var dark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+		document.documentElement.classList.toggle('theme-dark', dark);
+	})();
 </script>

@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EntryIndex from './EntryIndex.astro';
+import { SECTIONS, getEntries, type SectionId } from '../lib/entries';
+
+export interface Props {
+	section: SectionId;
+}
+
+const { section } = Astro.props;
+const s = SECTIONS[section];
+const items = await getEntries(section);
+const permalink = new URL(`${s.base}/`, Astro.site ?? Astro.url).href;
+const count = items.length === 0 ? 'No plates yet' : items.length === 1 ? '1 plate' : `${items.length} plates`;
+---
+
+<BaseLayout title={`${s.label} — Karthik's blog`} description={s.dek} permalink={permalink} current={section}>
+	<header class="index-head">
+		<h1 class="page-title">{s.label}</h1>
+		<p class="dek">{s.dek}</p>
+		<p class="count"><span class="dye-mark"></span>{count}</p>
+	</header>
+	<EntryIndex items={items} section={section} emptyText={s.empty} searchLabel={`Search ${s.label.toLowerCase()}`} />
+</BaseLayout>
+
+<style>
+	.index-head {
+		max-width: 960px;
+	}
+
+	.index-head .dek {
+		margin-top: 1rem;
+	}
+
+	.count {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 1.25rem;
+		font-family: var(--font-frame);
+		font-weight: 650;
+		font-size: 0.875rem;
+		color: var(--ink-soft);
+	}
+
+	:global(main) > :global(.key) {
+		max-width: 1080px;
+	}
+</style>
