@@ -5,22 +5,16 @@ publishDate: 28 June 2026
 draft: true
 description: In this post we will learn some other ways in which sections can be secured and some other ways they can be exploited.
 tags: ['windows', 'exercises', 'sections']
+section: writing
+series: Securing a Section of Windows
+part: 2
+object: Section (named)
+family: Object manager
+sketch: section-construction
+heroCaption: A named section being lowered into its place in the object namespace
+heroAlt: Workers lowering a block labelled "Section (memory mapped)" onto its frame with a crane, scaffolding and a ladder.
 ---
 
-<img
-  src="/assets/blog/windows/2-securing-a-section-of-windows/hero.png"
-  alt="Illustration of securing windows section"
-  style="display: block; margin: 0 auto; max-width: 350px; width: 100%; height: auto;"
-/>
-
-## <a name="top"></a> Table of Contents
-
-- [Recap](#recap)
-- [The Global Namespace](#the-global-namespace)
-    - [Exercise 1: DACL Inheritance](#exercise-1)
-- [SYSTEM Process](#system-process)
-- [Name Squatting](#name-squatting)
----
 
 > **Note:** I restarted my laptop and renamed the section between runs, so the section name and logon session IDs might differ from run to run.
 

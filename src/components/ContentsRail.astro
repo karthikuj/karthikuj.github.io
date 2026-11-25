@@ -1,0 +1,271 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+export interface Props {
+	headings: MarkdownHeading[];
+	storageKey?: string;
+	/** "rail": sticky desktop rail. "mobile": collapsible list shown below 1100px. */
+	variant?: 'rail' | 'mobile';
+}
+
+const { headings, storageKey = '', variant = 'rail' } = Astro.props;
+const top = headings.length ? Math.min(...headings.map((h) => h.depth)) : 1;
+// Exercise headings render "Exercise n" as its own chip, so restore the separator in the plain-text label.
+const items = headings
+	.filter((h) => h.depth <= top + 1)
+	.map((h) => ({ ...h, text: h.text.replace(/^(Exercise\s+\d+)(?=[^\s:])/i, '$1: '), sub: h.depth > top }));
+---
+
+{
+	items.length > 0 && variant === 'rail' && (
+			<aside class="rail" aria-label="Contents" data-contents data-key={storageKey}>
+				<h2 class="label-key">Contents</h2>
+				<ol>
+					{items.map((h) => (
+						<li class:list={{ sub: h.sub }}>
+							<a href={`#${h.slug}`} data-target={h.slug}>
+								{h.text}
+							</a>
+						</li>
+					))}
+				</ol>
+			</aside>
+	)
+}
+{
+	items.length > 0 && variant === 'mobile' && (
+			<details class="contents-mobile">
+				<summary>
+					<span class="summary-main">
+						<span>Contents</span>
+						<span class="now" data-contents-now>{items[0].text}</span>
+					</span>
+					<svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M4 6l4 4 4-4" />
+					</svg>
+				</summary>
+				<ol>
+					{items.map((h) => (
+						<li class:list={{ sub: h.sub }}>
+							<a href={`#${h.slug}`}>{h.text}</a>
+						</li>
+					))}
+				</ol>
+			</details>
+	)
+}
+
+<script>
+	const FLAG_TEXT = 'You stopped here';
+
+	function initRail(rail: HTMLElement) {
+		const key = `fieldguide:position:${rail.dataset.key}`;
+		const links = Array.from(rail.querySelectorAll<HTMLAnchorElement>('a[data-target]'));
+		const targets = links
+			.map((a) => document.getElementById(a.dataset.target ?? ''))
+			.filter((el): el is HTMLElement => el !== null);
+		if (!targets.length) return;
+
+		let saved: string | null = null;
+		try {
+			saved = localStorage.getItem(key);
+		} catch {
+			/* storage unavailable: the rail still tracks the current section */
+		}
+
+		// Flag the section the reader stopped at on a previous visit.
+		if (saved && saved !== targets[0].id) {
+			const link = links.find((a) => a.dataset.target === saved);
+			if (link) {
+				const flag = document.createElement('span');
+				flag.className = 'stopped';
+				flag.textContent = FLAG_TEXT;
+				link.after(flag);
+			}
+		}
+
+		let current = '';
+		let frame = 0;
+		const update = () => {
+			frame = 0;
+			const line = window.innerHeight * 0.3;
+			let active = targets[0];
+			for (const t of targets) {
+				if (t.getBoundingClientRect().top <= line) active = t;
+				else break;
+			}
+			if (active.id === current) return;
+			current = active.id;
+			const label = links.find((a) => a.dataset.target === current)?.textContent?.trim();
+			document.querySelectorAll('[data-contents-now]').forEach((el) => {
+				if (label) el.textContent = label;
+			});
+			for (const a of links) {
+				const on = a.dataset.target === current;
+				a.classList.toggle('current', on);
+				if (on) a.setAttribute('aria-current', 'location');
+				else a.removeAttribute('aria-current');
+			}
+			if (window.scrollY > 200) {
+				try {
+					localStorage.setItem(key, current);
+				} catch {
+					/* ignore */
+				}
+			}
+		};
+
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (!frame) frame = requestAnimationFrame(update);
+			},
+			{ passive: true },
+		);
+		update();
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-contents]').forEach(initRail);
+</script>
+
+<style>
+	.rail {
+		position: sticky;
+		top: 1.5rem;
+		max-height: calc(100vh - 3rem);
+		overflow-y: auto;
+		scrollbar-width: thin;
+		padding-bottom: 1rem;
+	}
+
+	.rail h2 {
+		margin-bottom: 0.9rem;
+	}
+
+	ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		font-family: var(--font-frame);
+		font-size: 0.875rem;
+		line-height: 1.4;
+	}
+
+	.rail li a {
+		display: block;
+		padding: 0.4rem 0 0.4rem 0.9rem;
+		border-left: 1px solid var(--rule);
+		color: var(--ink-soft);
+		text-decoration: none;
+		transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+	}
+
+	.rail li.sub a {
+		padding-left: 1.75rem;
+		color: var(--pencil);
+	}
+
+	.rail li a:hover {
+		color: var(--ink);
+		border-left-color: var(--rule-strong);
+	}
+
+	.rail li a:global(.current) {
+		color: var(--dye);
+		font-weight: 650;
+		border-left: 2px solid var(--dye);
+		padding-left: calc(0.9rem - 1px);
+	}
+
+	.rail li.sub a:global(.current) {
+		padding-left: calc(1.75rem - 1px);
+	}
+
+	.rail :global(.stopped) {
+		display: inline-block;
+		margin: 0.1rem 0 0.35rem 0.9rem;
+		padding: 0.05rem 0.45rem;
+		font-size: 0.6875rem;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--dye);
+		border: 1px solid var(--dye);
+		border-radius: 2px;
+	}
+
+	.contents-mobile {
+		display: none;
+	}
+
+	@media (max-width: 1100px) {
+		.rail {
+			display: none;
+		}
+
+		.contents-mobile {
+			display: block;
+			border: 1px solid var(--rule);
+			background: var(--sheet);
+			border-radius: 4px;
+			margin: 1.5rem 0 0;
+		}
+
+		.contents-mobile summary {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1rem;
+			cursor: pointer;
+			list-style: none;
+			padding: 0.7rem 1rem;
+			font-family: var(--font-frame);
+			font-weight: 700;
+			font-size: 0.9375rem;
+		}
+
+		.contents-mobile summary::-webkit-details-marker {
+			display: none;
+		}
+
+		.summary-main {
+			display: grid;
+			min-width: 0;
+		}
+
+		.now {
+			font-size: 0.8125rem;
+			font-weight: 550;
+			color: var(--dye);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.chev {
+			flex: none;
+			color: var(--pencil);
+			transition: transform 0.2s var(--ease-out);
+		}
+
+		.contents-mobile[open] .chev {
+			transform: rotate(180deg);
+		}
+
+		.contents-mobile ol {
+			padding: 0 1rem 0.9rem;
+		}
+
+		.contents-mobile li a {
+			display: block;
+			padding: 0.3rem 0;
+			text-decoration: none;
+			color: var(--ink-soft);
+		}
+
+		.contents-mobile li.sub a {
+			padding-left: 1rem;
+			color: var(--pencil);
+		}
+	}
+</style>

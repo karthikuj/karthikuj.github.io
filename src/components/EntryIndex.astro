@@ -1,0 +1,415 @@
+---
+import readingTime from 'reading-time';
+import SpecimenLabel from './SpecimenLabel.astro';
+import { SECTIONS, entryUrl, formatDate, type Entry, type SectionId } from '../lib/entries';
+
+export interface Props {
+	items: { entry: Entry; plate: number }[];
+	/** Section whose index this is; omit for the all-sections search page. */
+	section?: SectionId;
+	emptyText: string;
+	searchLabel: string;
+	autofocus?: boolean;
+}
+
+const { items, section, emptyText, searchLabel, autofocus = false } = Astro.props;
+const showSection = !section;
+
+const tags = [...new Set(items.flatMap((i) => i.entry.data.tags ?? []))].sort((a, b) => a.localeCompare(b));
+
+// Group rows by series, keeping the newest group first; standalone entries form their own group.
+const groups: { title?: string; rows: typeof items }[] = [];
+for (const item of items) {
+	const key = item.entry.data.series;
+	let g = groups.find((x) => x.title === key);
+	if (!g) groups.push((g = { title: key, rows: [] }));
+	g.rows.push(item);
+}
+
+const searchIndex = items.map(({ entry }) => ({
+	id: entry.id,
+	title: entry.data.title,
+	description: entry.data.description,
+	tags: entry.data.tags ?? [],
+	object: entry.data.object ?? '',
+	family: entry.data.family ?? '',
+	series: entry.data.series ?? '',
+}));
+---
+
+<div class="key" data-key-index>
+	<div class="tools" role="search">
+		<label class="visually-hidden" for="key-search">{searchLabel}</label>
+		<div class="search">
+			<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+				<circle cx="7" cy="7" r="4.6" />
+				<path d="M10.5 10.5 14 14" />
+			</svg>
+			<input id="key-search" type="search" placeholder={searchLabel} autocomplete="off" autofocus={autofocus} />
+		</div>
+		{
+			tags.length > 0 && (
+				<div class="filters" aria-label="Filter by tag">
+					<span class="label-key">Tags</span>
+					<button type="button" class="tag" data-tag="" aria-pressed="true">
+						All
+					</button>
+					{tags.map((t) => (
+						<button type="button" class="tag" data-tag={t} aria-pressed="false">
+							{t}
+						</button>
+					))}
+				</div>
+			)
+		}
+	</div>
+
+	{
+		items.length === 0 ? (
+			<SpecimenLabel class="empty" left="Plate —" right="Not yet collected">
+				<dt class="label-key">Status</dt>
+				<dd>{emptyText}</dd>
+				<dt class="label-key">Meanwhile</dt>
+				<dd>
+					<a href="/blog/">Read the writing</a> · <a href="/rss.xml">Follow the RSS feed</a>
+				</dd>
+			</SpecimenLabel>
+		) : (
+			<>
+				{groups.map((g) => (
+					<section class="group" data-group>
+						{g.title && <h2 class="group-title">{g.title}</h2>}
+						<ol>
+							{g.rows.map(({ entry, plate }) => {
+								const d = entry.data;
+								const minutes = Math.max(1, Math.round(readingTime(entry.body ?? '').minutes));
+								return (
+									<li class="row" data-id={entry.id} data-tags={(d.tags ?? []).join('|')} data-section={d.section}>
+										<div class="plate-col">
+											<span class="plate-no">
+												<span class="dye-mark" />
+												Plate {plate}
+											</span>
+											{showSection && <span class="sect">{SECTIONS[d.section].label}</span>}
+											<span>{formatDate(d.publishDate)}</span>
+											<span>{minutes} min</span>
+										</div>
+										<div class="main-col">
+											<h3>
+												<a href={entryUrl(entry)}>{d.title}</a>
+											</h3>
+											<p>{d.description}</p>
+											{(d.object || d.family || d.part) && (
+												<p class="meta">
+													{d.part && <span>Part {d.part}</span>}
+													{d.object && (
+														<span>
+															<span class="label-key">Object</span> {d.object}
+														</span>
+													)}
+													{d.family && (
+														<span>
+															<span class="label-key">Family</span> {d.family}
+														</span>
+													)}
+												</p>
+											)}
+										</div>
+										<div class="tag-col">
+											{(d.tags ?? []).map((t) => (
+												<span class="tag">{t}</span>
+											))}
+										</div>
+									</li>
+								);
+							})}
+						</ol>
+					</section>
+				))}
+				<p class="no-match" hidden aria-live="polite">
+					Nothing in this key matches. Try another word or clear the tag filter.
+				</p>
+			</>
+		)
+	}
+
+	<script type="application/json" data-search-index set:html={JSON.stringify(searchIndex)} />
+</div>
+
+<script>
+	import Fuse from 'fuse.js';
+
+	type Item = { id: string; title: string; description: string; tags: string[]; object: string; family: string; series: string };
+
+	document.querySelectorAll<HTMLElement>('[data-key-index]').forEach((root) => {
+		const data: Item[] = JSON.parse(root.querySelector('[data-search-index]')?.textContent || '[]');
+		if (!data.length) return;
+		const input = root.querySelector<HTMLInputElement>('#key-search')!;
+		const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('button[data-tag]'));
+		const rows = Array.from(root.querySelectorAll<HTMLElement>('.row'));
+		const groups = Array.from(root.querySelectorAll<HTMLElement>('[data-group]'));
+		const noMatch = root.querySelector<HTMLElement>('.no-match');
+		const fuse = new Fuse(data, {
+			keys: ['title', 'description', 'tags', 'object', 'family', 'series'],
+			threshold: 0.32,
+			ignoreLocation: true,
+		});
+
+		const params = new URLSearchParams(location.search);
+		let tag = params.get('tag') ?? '';
+		if (tag && !buttons.some((b) => b.dataset.tag === tag)) tag = '';
+		input.value = params.get('q') ?? '';
+
+		const apply = () => {
+			const q = input.value.trim();
+			const hits = q ? new Set(fuse.search(q).map((r) => r.item.id)) : null;
+			let shown = 0;
+			for (const row of rows) {
+				const okTag = !tag || (row.dataset.tags ?? '').split('|').includes(tag);
+				const okQuery = !hits || hits.has(row.dataset.id ?? '');
+				row.hidden = !(okTag && okQuery);
+				if (!row.hidden) shown++;
+			}
+			for (const g of groups) g.hidden = !g.querySelector('.row:not([hidden])');
+			if (noMatch) noMatch.hidden = shown > 0;
+			for (const b of buttons) b.setAttribute('aria-pressed', String((b.dataset.tag ?? '') === tag));
+
+			const url = new URL(location.href);
+			if (tag) url.searchParams.set('tag', tag);
+			else url.searchParams.delete('tag');
+			if (q) url.searchParams.set('q', q);
+			else url.searchParams.delete('q');
+			history.replaceState(null, '', url);
+		};
+
+		input.addEventListener('input', apply);
+		for (const b of buttons) {
+			b.addEventListener('click', () => {
+				tag = b.dataset.tag ?? '';
+				apply();
+			});
+		}
+		apply();
+	});
+</script>
+
+<style>
+	.tools {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem 1.75rem;
+		margin: 2rem 0 2.5rem;
+	}
+
+	.search {
+		position: relative;
+		flex: 0 1 340px;
+		min-width: 220px;
+		color: var(--pencil);
+	}
+
+	.search svg {
+		position: absolute;
+		left: 0.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+		pointer-events: none;
+	}
+
+	input {
+		width: 100%;
+		font: 500 0.9375rem var(--font-frame);
+		color: var(--ink);
+		background: var(--sheet);
+		border: 1px solid var(--rule-strong);
+		border-radius: 4px;
+		padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+		caret-color: var(--dye);
+	}
+
+	input::placeholder {
+		color: var(--pencil);
+	}
+
+	input:focus {
+		outline: 2px solid var(--dye);
+		outline-offset: 1px;
+		border-color: transparent;
+	}
+
+	.filters {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	.filters .label-key {
+		margin-right: 0.25rem;
+	}
+
+	button.tag {
+		font-size: 0.8125rem;
+		padding: 0.15rem 0.55rem;
+		background: transparent;
+		cursor: pointer;
+		--tag-dye: var(--pencil);
+		color: var(--ink-soft);
+	}
+
+	button.tag:hover {
+		--tag-dye: var(--dye);
+		color: var(--dye);
+	}
+
+	button.tag[aria-pressed='true'] {
+		background: var(--dye);
+		border-color: var(--dye);
+		color: var(--sheet);
+	}
+
+	.group + .group {
+		margin-top: 3rem;
+	}
+
+	.group-title {
+		font-size: 1.25rem;
+		font-stretch: 105%;
+		padding-bottom: 0.6rem;
+		border-bottom: 2px solid var(--ink);
+	}
+
+	ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: 8.5rem minmax(0, 1fr) minmax(0, 13rem);
+		gap: 1.5rem;
+		padding: 1.4rem 0;
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.plate-col {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		font-family: var(--font-frame);
+		font-size: 0.8125rem;
+		color: var(--pencil);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.plate-no {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		font-weight: 800;
+		font-stretch: 110%;
+		font-size: 0.9375rem;
+		color: var(--ink);
+		margin-bottom: 0.15rem;
+	}
+
+	.row[data-section='writing'] .dye-mark {
+		--mark: var(--writing);
+	}
+
+	.row[data-section='projects'] .dye-mark {
+		--mark: var(--projects);
+	}
+
+	.row[data-section='research'] .dye-mark {
+		--mark: var(--research);
+	}
+
+	.sect {
+		font-weight: 650;
+		color: var(--ink-soft);
+	}
+
+	.main-col h3 {
+		font-size: 1.375rem;
+		font-weight: 750;
+		line-height: 1.2;
+	}
+
+	.main-col h3 a {
+		text-decoration: none;
+	}
+
+	.main-col h3 a:hover {
+		text-decoration: underline;
+		text-decoration-color: var(--dye);
+	}
+
+	.main-col p {
+		margin-top: 0.45rem;
+		max-width: 62ch;
+		color: var(--ink-soft);
+		line-height: 1.55;
+	}
+
+	.main-col .meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem 1.25rem;
+		font-family: var(--font-frame);
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--ink);
+	}
+
+	.meta .label-key {
+		margin-right: 0.3rem;
+	}
+
+	.tag-col {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		justify-content: flex-end;
+		gap: 0.3rem;
+	}
+
+	.tag-col .tag {
+		--tag-dye: var(--pencil);
+		color: var(--ink-soft);
+	}
+
+	.no-match {
+		margin-top: 1.5rem;
+		font-family: var(--font-frame);
+		color: var(--pencil);
+	}
+
+	.key :global(.empty) {
+		max-width: 520px;
+	}
+
+	@media (max-width: 760px) {
+		.row {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.6rem;
+		}
+
+		.plate-col {
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: baseline;
+			gap: 0.25rem 0.9rem;
+		}
+
+		.tag-col {
+			justify-content: flex-start;
+		}
+
+		.search {
+			flex-basis: 100%;
+		}
+	}
+</style>

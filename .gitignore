@@ -21,3 +21,13 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# design tool workspaces (Impeccable and Superdesign); docs/PRODUCT.md and docs/DESIGN.md stay tracked
+.impeccable/
+.superdesign/
+
+# local Claude app config (machine-specific paths)
+.claude/
+
+# private notes (never committed)
+notes/private/

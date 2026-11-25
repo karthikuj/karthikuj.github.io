@@ -1,0 +1,81 @@
+---
+// Draws a plate sketch in the theme's own colours.
+// Two kinds are supported:
+// 1. Traced pencil sketches: public/assets/sketches/<id>/{paper,tone,ink}.svg plus meta.json.
+//    Each layer is used as a CSS mask, so the files stay cacheable and the colours come from the
+//    theme tokens (paper = sheet, tone = ink at low opacity, ink = ink).
+// 2. Hand-drawn inline SVGs: src/assets/sketches/<id>.svg, drawn with currentColor.
+import fs from 'node:fs';
+import path from 'node:path';
+
+const inlineSketches = import.meta.glob('../assets/sketches/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<
+	string,
+	string
+>;
+
+export interface Props {
+	id: string;
+	label: string;
+}
+
+const { id, label } = Astro.props;
+const metaPath = path.join(process.cwd(), 'public', 'assets', 'sketches', id, 'meta.json');
+const layered = fs.existsSync(metaPath) ? (JSON.parse(fs.readFileSync(metaPath, 'utf8')) as { width: number; height: number }) : null;
+
+let svg = '';
+if (!layered) {
+	const raw = inlineSketches[`../assets/sketches/${id}.svg`];
+	if (!raw) throw new Error(`Unknown sketch "${id}" (expected public/assets/sketches/${id}/ or src/assets/sketches/${id}.svg)`);
+	svg = raw.replace(/<\?xml[^>]*>\s*/, '').replace(/<!--[\s\S]*?-->\s*/g, '');
+}
+const base = `/assets/sketches/${id}`;
+---
+
+{
+	layered ? (
+		<div class="sketch traced" role="img" aria-label={label} style={`aspect-ratio: ${layered.width} / ${layered.height}`}>
+			<span class="layer paper" style={`--mask: url(${base}/paper.svg)`} />
+			<span class="layer tone" style={`--mask: url(${base}/tone.svg)`} />
+			<span class="layer ink" style={`--mask: url(${base}/ink.svg)`} />
+		</div>
+	) : (
+		<div class="sketch" role="img" aria-label={label} set:html={svg} />
+	)
+}
+
+<style>
+	.sketch {
+		width: 100%;
+		color: var(--ink);
+	}
+
+	.sketch :global(svg) {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.traced {
+		position: relative;
+	}
+
+	.layer {
+		position: absolute;
+		inset: 0;
+		-webkit-mask: var(--mask) center / 100% 100% no-repeat;
+		mask: var(--mask) center / 100% 100% no-repeat;
+	}
+
+	.paper {
+		background: var(--sheet);
+	}
+
+	.tone {
+		background: var(--ink);
+		opacity: 0.34;
+	}
+
+	.ink {
+		background: var(--ink);
+	}
+</style>

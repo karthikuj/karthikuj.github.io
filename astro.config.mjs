@@ -5,10 +5,12 @@ import svelte from '@astrojs/svelte';
 import rehypeExternalLinks from 'rehype-external-links';
 import remarkGfm from 'remark-gfm';
 import remarkSmartypants from 'remark-smartypants';
+import rehypeFieldGuide from './src/lib/rehype-field-guide.mjs';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://karthikuj.github.io',
+	devToolbar: { enabled: false },
 	integrations: [mdx(), svelte(), sitemap()],
 	vite: {
 		optimizeDeps: {
@@ -17,7 +19,11 @@ export default defineConfig({
 	},
 	markdown: {
 		shikiConfig: {
-			theme: 'nord',
+			themes: {
+				light: 'github-light',
+				dark: 'github-dark-dimmed',
+			},
+			defaultColor: false,
 		},
 		remarkPlugins: [remarkGfm, remarkSmartypants],
 		rehypePlugins: [
@@ -25,8 +31,10 @@ export default defineConfig({
 				rehypeExternalLinks,
 				{
 					target: '_blank',
+					rel: ['noopener', 'noreferrer'],
 				},
 			],
+			rehypeFieldGuide,
 		],
 	},
 });

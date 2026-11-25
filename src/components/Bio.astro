@@ -1,27 +1,36 @@
-<div>
-	<img src="/assets/profile-pic.webp" alt="Portrait of Karthik" />
+---
+// Author note at the end of every entry.
+---
+
+<aside class="bio" aria-label="About the author">
+	<img src="/assets/profile-pic.webp" alt="Portrait of Karthik" width="72" height="72" loading="lazy" />
 	<p>
-		Hi, I am <strong>Karthik</strong>. I am a software engineer at PhonePe, and in my own time I like exploring
-		security, currently I am submerged in windows security. You can find more on the <a href="/about">about</a> page
-		or browse the <a href="/blog" data-astro-reload>blog</a>.
+		Written by <strong>Karthik</strong>, a software engineer at PhonePe who spends personal time on security, currently
+		Windows security. More on the <a href="/about/">about</a> page, or browse the <a href="/blog/">writing</a>.
 	</p>
-</div>
+</aside>
 
 <style>
-	div {
-		align-items: center;
+	.bio {
 		display: flex;
+		align-items: center;
+		gap: 1.1rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--rule);
 	}
 
 	img {
-		width: 100px;
-		height: 100px;
-		border-radius: 100px;
-		display: block;
-		margin-right: 20px;
+		width: 72px;
+		height: 72px;
+		border-radius: 50%;
+		flex: none;
+		border: 1px solid var(--rule);
+		object-fit: cover;
 	}
 
 	p {
-		font-size: 1.125rem;
+		font-size: 1rem;
+		line-height: 1.55;
+		color: var(--ink-soft);
 	}
 </style>

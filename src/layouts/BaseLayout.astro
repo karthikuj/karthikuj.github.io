@@ -1,50 +1,80 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
+import ThumbTabs from '../components/ThumbTabs.astro';
 import Footer from '../components/Footer.astro';
+import type { SectionId } from '../lib/entries';
 
 export interface Props {
-  title: string;
-  description: string;
-  permalink: string;
-  current?: string;
+	title: string;
+	description: string;
+	permalink: string;
+	/** Which nav item is active. */
+	current?: SectionId | 'about' | 'search' | 'home';
+	image?: string;
 }
-const { title, description, permalink, current } = Astro.props;
+
+const { title, description, permalink, current = 'home', image } = Astro.props;
+const section = current === 'writing' || current === 'projects' || current === 'research' ? current : undefined;
 ---
-<html lang="en">
-<head>
-  <BaseHead title={title} description={description} permalink={permalink} />
-</head>
-<body>
-  <div class="layout">
-    <Header current={current} />
 
-    <main>
-      <slot />
-    </main>
-
-    <Footer />
-  </div>
-</body>
+<html lang="en" data-section={section}>
+	<head>
+		<BaseHead title={title} description={description} permalink={permalink} image={image} />
+	</head>
+	<body>
+		<a class="skip" href="#main">Skip to content</a>
+		<ThumbTabs current={section} />
+		<div class="frame">
+			<Header current={current} />
+			<main id="main">
+				<slot />
+			</main>
+			<Footer />
+		</div>
+	</body>
 </html>
 
 <style>
-  .layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    min-height: 100vh;
-  }
+	.frame {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		max-width: 1440px;
+		margin: 0 auto;
+		padding: 0 72px 0 48px;
+	}
 
-  main {
-    flex: 1;
-    position: relative;
-    margin: 0 auto;
-    max-width: 1400px;
-    padding: 1em 2em;
-    box-sizing: border-box;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+	main {
+		flex: 1;
+		padding: 3rem 0 5rem;
+	}
+
+	.skip {
+		position: absolute;
+		left: 1rem;
+		top: -3rem;
+		z-index: 10;
+		background: var(--ink);
+		color: var(--board);
+		font-family: var(--font-frame);
+		font-weight: 600;
+		padding: 0.5rem 0.9rem;
+		border-radius: 3px;
+		text-decoration: none;
+	}
+
+	.skip:focus {
+		top: 1rem;
+	}
+
+	@media (max-width: 900px) {
+		.frame {
+			padding: 0 var(--gutter);
+		}
+
+		main {
+			padding: 2rem 0 4rem;
+		}
+	}
 </style>

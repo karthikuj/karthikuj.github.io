@@ -1,0 +1,342 @@
+---
+import { render } from 'astro:content';
+import readingTime from 'reading-time';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentsRail from './ContentsRail.astro';
+import SpecimenLabel from './SpecimenLabel.astro';
+import Sketch from './Sketch.astro';
+import Bio from './Bio.astro';
+import { SECTIONS, entryUrl, formatDate, getEntries, getSeries, type Entry } from '../lib/entries';
+
+export interface Props {
+	entry: Entry;
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const section = SECTIONS[d.section];
+const { Content, headings } = await render(entry);
+const minutes = Math.max(1, Math.round(readingTime(entry.body ?? '').minutes));
+const permalink = new URL(entryUrl(entry), Astro.site ?? Astro.url).href;
+
+const sectionEntries = await getEntries(d.section);
+const index = sectionEntries.findIndex((e) => e.entry.id === entry.id);
+const plate = sectionEntries[index]?.plate ?? 1;
+const newer = index > 0 ? sectionEntries[index - 1].entry : undefined;
+const older = index >= 0 && index < sectionEntries.length - 1 ? sectionEntries[index + 1].entry : undefined;
+
+const series = d.series ? await getSeries(d.series) : [];
+const partOf = d.part && series.length > 1 ? `Part ${d.part} of ${series.length}` : undefined;
+const hasFigure = Boolean(d.sketch || d.hero);
+const nextPart = d.part ? series.find((p) => p.data.part === d.part! + 1) : undefined;
+---
+
+<BaseLayout title={`${d.title} — Karthik's blog`} description={d.description} permalink={permalink} current={d.section}>
+	<div class="entry">
+		<ContentsRail headings={headings} storageKey={d.slug} />
+
+		<article>
+			<header class="entry-head">
+				<h1 class="page-title">{d.title}</h1>
+				<p class="dek">{d.description}</p>
+			</header>
+
+			<ContentsRail headings={headings} variant="mobile" />
+
+			<div class:list={['plate', { 'no-figure': !hasFigure }]}>
+				{
+					hasFigure && (
+						<figure class="plate-figure">
+							{d.sketch ? (
+								<Sketch id={d.sketch} label={d.heroAlt ?? d.title} />
+							) : (
+								<img src={d.hero} alt={d.heroAlt ?? ''} width="520" height="500" />
+							)}
+							<figcaption>
+								<b>Fig.</b>
+								{d.heroCaption ?? d.heroAlt ?? d.title}
+							</figcaption>
+						</figure>
+					)
+				}
+				<SpecimenLabel
+					class="plate-label"
+					left={`Plate ${plate}`}
+					right={partOf}
+					rows={[
+						{ key: 'Status', value: d.draft ? 'Draft: visible only on the dev server' : null },
+						{ key: 'Object', value: d.object },
+						{ key: 'Family', value: d.family },
+						{ key: 'Series', value: d.series },
+						{ key: 'Language', value: d.language },
+						{ key: 'Collected', value: formatDate(d.publishDate) },
+						{ key: 'Reading', value: `${minutes} min` },
+					]}
+				>
+					{
+						d.repo && (
+							<>
+								<dt class="label-key">Repo</dt>
+								<dd>
+									<a href={d.repo} rel="noopener">
+										{d.repo.replace(/^https?:\/\/(www\.)?/, '')}
+									</a>
+								</dd>
+							</>
+						)
+					}
+					{
+						(d.tags?.length ?? 0) > 0 && (
+							<>
+								<dt class="label-key">Tags</dt>
+								<dd class="tags">
+									{d.tags!.map((t) => (
+										<a class="tag" href={`${section.base}/?tag=${encodeURIComponent(t)}`}>
+											{t}
+										</a>
+									))}
+								</dd>
+							</>
+						)
+					}
+					{
+						nextPart && (
+							<>
+								<dt class="label-key">Next</dt>
+								<dd>
+									{nextPart.data.draft ? (
+										<span class="pending">Part {nextPart.data.part}, in progress</span>
+									) : (
+										<a href={entryUrl(nextPart)}>Part {nextPart.data.part}: {nextPart.data.title}</a>
+									)}
+								</dd>
+							</>
+						)
+					}
+				</SpecimenLabel>
+			</div>
+
+			<div class="prose">
+				<Content />
+			</div>
+
+			<footer class="entry-foot">
+				{
+					series.length > 1 && (
+						<nav class="series" aria-label={`${d.series} series`}>
+							<h2 class="label-key">Series · {d.series}</h2>
+							<ol>
+								{series.map((p) => (
+									<li class:list={{ here: p.id === entry.id }}>
+										<span class="part">Part {p.data.part}</span>
+										{p.id === entry.id ? (
+											<span aria-current="page">{p.data.title}</span>
+										) : p.data.draft ? (
+											<span class="pending">In progress</span>
+										) : (
+											<a href={entryUrl(p)}>{p.data.title}</a>
+										)}
+									</li>
+								))}
+							</ol>
+						</nav>
+					)
+				}
+
+				{
+					(newer || older) && (
+						<nav class="pager" aria-label={`More ${section.label.toLowerCase()}`}>
+							{older ? (
+								<a href={entryUrl(older)} rel="prev">
+									<span class="label-key">Previous plate</span>
+									{older.data.title}
+								</a>
+							) : (
+								<span />
+							)}
+							{newer && (
+								<a href={entryUrl(newer)} rel="next" class="next">
+									<span class="label-key">Next plate</span>
+									{newer.data.title}
+								</a>
+							)}
+						</nav>
+					)
+				}
+
+				<Bio />
+			</footer>
+		</article>
+	</div>
+</BaseLayout>
+
+<style>
+	.entry {
+		display: grid;
+		grid-template-columns: 210px minmax(0, 960px);
+		gap: 56px;
+		align-items: start;
+	}
+
+	article {
+		min-width: 0;
+	}
+
+	.entry-head .dek {
+		margin-top: 1.1rem;
+	}
+
+	.plate {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 272px;
+		margin: 2.25rem 0 3rem;
+		border: 1px solid var(--rule);
+		background: var(--sheet);
+	}
+
+	.plate.no-figure {
+		grid-template-columns: minmax(0, 420px);
+		border: 0;
+		background: none;
+	}
+
+	.plate-figure {
+		margin: 0;
+		padding: 1.5rem 1.75rem 1rem;
+		border-right: 1px solid var(--rule);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.plate-figure :global(.sketch),
+	.plate-figure img {
+		max-width: 460px;
+		margin: 0 auto;
+	}
+
+	.plate-figure figcaption {
+		font-family: var(--font-frame);
+		font-size: 0.8125rem;
+		color: var(--pencil);
+	}
+
+	.plate-figure figcaption b {
+		color: var(--ink);
+		margin-right: 0.45em;
+	}
+
+	.plate :global(.plate-label) {
+		border: 0;
+		background: none;
+		padding: 1.1rem 1.2rem;
+	}
+
+	.plate.no-figure :global(.plate-label) {
+		border: 1px solid var(--rule);
+		background: var(--sheet);
+	}
+
+	.entry-foot {
+		margin-top: 4.5rem;
+		display: grid;
+		gap: 2.5rem;
+		max-width: var(--measure);
+	}
+
+	.series {
+		border-top: 2px solid var(--ink);
+		padding-top: 0.9rem;
+	}
+
+	.series h2 {
+		margin-bottom: 0.75rem;
+	}
+
+	.series ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		font-family: var(--font-frame);
+		font-size: 0.9375rem;
+	}
+
+	.series li {
+		display: flex;
+		gap: 1rem;
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.series .part {
+		width: 4rem;
+		flex: none;
+		color: var(--pencil);
+		font-weight: 600;
+	}
+
+	.series li.here {
+		font-weight: 700;
+		color: var(--dye);
+	}
+
+	.pending,
+	.series .pending {
+		color: var(--pencil);
+		font-style: italic;
+	}
+
+	.pager {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+	}
+
+	.pager a {
+		display: grid;
+		gap: 0.3rem;
+		padding: 0.9rem 1rem;
+		border: 1px solid var(--rule);
+		border-radius: 4px;
+		font-family: var(--font-frame);
+		font-weight: 700;
+		text-decoration: none;
+		line-height: 1.3;
+	}
+
+	.pager a:hover {
+		border-color: var(--dye);
+	}
+
+	.pager .next {
+		text-align: right;
+	}
+
+	@media (max-width: 1100px) {
+		.entry {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.plate {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.plate-figure {
+			border-right: 0;
+			border-bottom: 1px solid var(--rule);
+			padding: 1rem;
+		}
+
+		.pager {
+			grid-template-columns: 1fr;
+		}
+
+		.pager .next {
+			text-align: left;
+		}
+	}
+</style>

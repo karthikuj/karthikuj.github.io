@@ -1,0 +1,121 @@
+---
+import { SECTIONS, SECTION_IDS, type SectionId } from '../lib/entries';
+
+const { current } = Astro.props as { current?: SectionId };
+---
+
+<nav class="thumb" aria-label="Sections">
+	{
+		SECTION_IDS.map((id) => (
+			<a
+				href={`${SECTIONS[id].base}/`}
+				class:list={['tab', id, { on: current === id }]}
+				aria-current={current === id ? 'page' : undefined}
+			>
+				{SECTIONS[id].label}
+			</a>
+		))
+	}
+</nav>
+
+<style>
+	.thumb {
+		position: fixed;
+		right: 0;
+		top: 128px;
+		z-index: 5;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 4px;
+	}
+
+	.tab {
+		writing-mode: vertical-rl;
+		font-family: var(--font-frame);
+		font-stretch: 82%;
+		font-weight: 700;
+		font-size: 0.75rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		text-decoration: none;
+		color: var(--tab-text);
+		width: 30px;
+		padding: 1.1rem 0;
+		display: flex;
+		align-items: center;
+		border-radius: 5px 0 0 5px;
+		transition: width 0.2s var(--ease-out);
+	}
+
+	/* Day: deep dyes with white labels. Night: the muted night dyes with board-coloured labels. */
+	.thumb {
+		--tab-text: #ffffff;
+		--tab-writing: #1f6e54;
+		--tab-projects: #8a5b0c;
+		--tab-research: #5e2b63;
+	}
+
+	:global(.theme-dark) .thumb {
+		--tab-text: #1d1f1e;
+		--tab-writing: var(--writing);
+		--tab-projects: var(--projects);
+		--tab-research: var(--research);
+	}
+
+	.tab.writing {
+		background: var(--tab-writing);
+	}
+
+	.tab.projects {
+		background: var(--tab-projects);
+	}
+
+	.tab.research {
+		background: var(--tab-research);
+	}
+
+	.tab:hover,
+	.tab:focus-visible {
+		width: 36px;
+		color: var(--tab-text);
+	}
+
+	.tab.on {
+		width: 42px;
+	}
+
+	@media (max-width: 900px) {
+		.thumb {
+			position: static;
+			flex-direction: row;
+			gap: 0;
+			align-items: flex-start;
+		}
+
+		.tab {
+			writing-mode: horizontal-tb;
+			flex: 1;
+			width: auto;
+			justify-content: center;
+			padding: 0.3rem 0 0.25rem;
+			font-size: 0.625rem;
+			border-radius: 0;
+		}
+
+		.tab:hover,
+		.tab:focus-visible,
+		.tab.on {
+			width: auto;
+		}
+
+		/* Active section hangs lower and is underlined, so state never rests on colour or opacity. */
+		.tab.on {
+			padding-bottom: 0.6rem;
+			border-radius: 0 0 4px 4px;
+			text-decoration: underline;
+			text-decoration-thickness: 2px;
+			text-underline-offset: 3px;
+		}
+	}
+</style>
