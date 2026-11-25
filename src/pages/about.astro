@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SpecimenLabel from '../components/SpecimenLabel.astro';
+import Sketch from '../components/Sketch.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const title = `About — ${SITE_TITLE}`;
@@ -13,7 +14,7 @@ const permalink = new URL('/about/', Astro.site ?? Astro.url).href;
 	<div class="about">
 		<div class="collector">
 			<figure class="portrait">
-				<img src="/assets/profile-pic.webp" alt="Portrait of Karthik" width="320" height="320" />
+				<Sketch id="about-hiker" label="Pencil sketch of Karthik in a checked shirt with a backpack, looking out over a forested mountain valley" />
 			</figure>
 			<SpecimenLabel
 				left="The collector"
@@ -63,13 +64,6 @@ const permalink = new URL('/about/', Astro.site ?? Astro.url).href;
 		padding: 1rem;
 	}
 
-	.portrait img {
-		display: block;
-		width: 100%;
-		aspect-ratio: 1;
-		object-fit: cover;
-		border-radius: 2px;
-	}
 
 	.about-text {
 		font-size: 1.1875rem;

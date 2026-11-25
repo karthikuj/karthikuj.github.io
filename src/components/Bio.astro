@@ -1,9 +1,12 @@
 ---
 // Author note at the end of every entry.
+import Sketch from './Sketch.astro';
 ---
 
 <aside class="bio" aria-label="About the author">
-	<img src="/assets/profile-pic.webp" alt="Portrait of Karthik" width="72" height="72" loading="lazy" />
+	<div class="avatar">
+		<Sketch id="author-avatar" label="Pencil sketch of Karthik" />
+	</div>
 	<p>
 		Written by <strong>Karthik</strong>, a software engineer at PhonePe who spends personal time on security, currently
 		Windows security. More on the <a href="/about/">about</a> page, or browse the <a href="/blog/">writing</a>.
@@ -19,13 +22,14 @@
 		border-top: 1px solid var(--rule);
 	}
 
-	img {
+	.avatar {
 		width: 72px;
 		height: 72px;
-		border-radius: 50%;
 		flex: none;
+		border-radius: 50%;
+		overflow: hidden;
 		border: 1px solid var(--rule);
-		object-fit: cover;
+		background: var(--sheet);
 	}
 
 	p {
