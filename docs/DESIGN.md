@@ -192,7 +192,7 @@ components:
 
 **Creative North Star: "The Field Guide Plate"**
 
-Every write-up is a plate in a naturalist's field guide. The kernel object under study is mounted on a white sheet over a cool mounting board, with a ruled specimen label beside it (Plate n, Part n of n, Object, Family, Collected, Reading, Tags), and the reader keys their way through it with a contents rail and fore-edge thumb tabs. The frame (titles, labels, navigation, captions, tables) is set in Archivo with its width axis; the reading text is Literata; code is JetBrains Mono and nothing else.
+Every write-up is a plate in a naturalist's field guide. The kernel object under study is mounted on a white sheet over a cool mounting board, with a ruled specimen label beside it (Plate n, Part n of n, Object, Series, Collected, Reading, Tags), and the reader keys their way through it with a contents rail and fore-edge thumb tabs. The frame (titles, labels, navigation, captions, tables) is set in Archivo with its width axis; the reading text is Literata; code is JetBrains Mono and nothing else.
 
 The system is flat and quiet. Space and hairline rules separate content; there are no chrome panels, no shadows and no gradients. Colour is a pale board, an ink and a pencil grey, plus exactly three section dyes, each printed with its word: viridian for Writing, ochre for Projects, aubergine for Research. At night the same board sits under a lamp: warm graphite rather than blue-black, with the dyes turned into muted pigments. Illustration is a rough pencil sketch with hatched shading, traced into SVG layers and painted in the theme's own paper and ink, so it follows the theme.
 
@@ -270,11 +270,11 @@ All three are self-hosted WOFF2 under `public/assets/fonts/` (SIL OFL), declared
 
 ## Layout
 
-**Frame.** A centred frame up to 1440px, padded 48px left and 72px right (the right side leaves room for the thumb tabs); under 900px both sides drop to the 16px gutter. `main` pads 3rem top and 5rem bottom (2rem / 4rem under 900px). The masthead is a single row with the wordmark (logo and name) on the left and About, Search and the theme toggle on the right, closed by a 1px rule. Section navigation is not in the masthead: the thumb tabs are the only links to Writing, Projects and Research.
+**Frame.** A centred frame up to 1440px, padded 48px left and 72px right (the right side leaves room for the thumb tabs); under 900px both sides drop to the 16px gutter. `main` pads 3rem top and 5rem bottom (2rem / 4rem under 900px). The masthead is a single row with the wordmark ("Karthik's blog" in Archivo 800, no logo) on the left and About, Search and the theme toggle on the right, closed by a 1px rule. Section navigation is not in the masthead: the thumb tabs are the only links to Writing, Projects and Research.
 
 **Entry page.** A two-column grid: a 210px sticky contents rail, a 56px gap, and an article column up to 960px. The article opens with the display title and dek, then the mounted plate: a bordered sheet split into a figure (up to 460px sketch) and a 272px specimen label, separated by a hairline. Without a figure the plate collapses to a 420px label alone. Prose then runs in a grid whose first column is the 68ch measure; listings, tables and figures span the full 960px so wide tool output is never squeezed. The entry foot (series list, pager, bio) stays at the measure, 4.5rem below the prose.
 
-**Index pages.** Header up to 960px (title, dek, dye mark with plate count), then search and tag filters, then entries grouped by series up to 1080px. Each row is a three-column grid: 8.5rem plate column (dye mark, "Plate n", date, reading time), a flexible main column (title, description at 62ch, Part / Object / Family meta) and a 13rem tag column.
+**Index pages.** Header up to 1080px: title, dek and dye mark with plate count on the left, and the section's sketch on the right (writing-quill, projects-hammer, research-scientist; capped at 15rem tall, up to 26rem wide, right-aligned with the key; under 760px it drops below the dek at 10rem tall), then search and tag filters, then entries grouped by series up to 1080px. Each row is a three-column grid: 8.5rem plate column (dye mark, "Plate n", date, reading time), a flexible main column (title, description at 62ch, Part / Object meta) and a 13rem tag column.
 
 **Home.** An intro grid of copy and the author sketch (`author-at-laptop`, up to 420px, unframed on the board), then "Latest plates" (one row per section, dyed with its word) and series labels, both up to 1080px.
 
@@ -284,7 +284,7 @@ All three are self-hosted WOFF2 under `public/assets/fonts/` (SIL OFL), declared
 - **1100px:** the contents rail collapses into a "Contents" disclosure (a bordered sheet showing the current section name) above the plate.
 - **960px:** the home intro stacks.
 - **900px:** thumb tabs leave the right edge and become a full-width row of horizontal tabs at the top of the page; the frame gutter drops to 16px; prose becomes one column with smaller headings.
-- **760px:** the masthead tightens (34px logo, 1.05rem name) and stays one row; under 420px Search shows only its icon, with the label kept for screen readers; the plate stacks (figure above label); the pager goes single-column; index rows stack with the plate column inline.
+- **760px:** the masthead tightens (1.05rem name) and stays one row; under 420px Search shows only its icon, with the label kept for screen readers; the plate stacks (figure above label); the pager goes single-column; index rows stack with the plate column inline.
 
 ### Named Rules
 **The Wide Evidence Rule.** Listings, tables and figures break out of the 68ch measure to the full content width (960px) and scroll horizontally inside themselves; prose never does.
@@ -318,12 +318,20 @@ Fore-edge index tabs, one per section, always labelled with the section word.
 - **Hover / Focus:** widens to 36px. **Current section:** 42px. Width eases over 0.2s.
 - **900px and below:** a static horizontal row of equal labelled tabs at the top, 0.625rem text, all at full pigment; the current tab hangs lower with rounded bottom corners and an underlined label.
 
+### Margin notes
+Small notes hung in the right margin beside the paragraph they belong to, so wide screens use the space beside the 68ch measure.
+- **Source:** a paragraph starting "Read more:" or a blockquote starting "**Aside:**". `rehype-field-guide` attaches each to the nearest preceding paragraph or list item (skipping listings, figures and tables, never crossing a heading or rule).
+- **Style:** Archivo 0.8125rem, weight 500, Soft Ink, led by its label key ("Read more" or "Aside"), with a 1px Rule above it.
+- **Wide (prose container at least 940px):** absolutely positioned 2.75rem right of the paragraph, up to 15.5rem wide, top-aligned with it. A small script pushes a note down when it would overlap the one above.
+- **Narrow:** shown inline under its paragraph.
+
 ### Contents rail (signature)
 Tracks the section being read and remembers where the reader stopped.
 - **Style:** sticky 1.5rem from the top, a "Contents" label head, Archivo 0.875rem items with a 1px left hairline; sub-items indent to 1.75rem in Pencil.
 - **Hover:** Ink, Strong Rule border.
 - **Current:** dye text, weight 650, 2px dye left border. Current is the last heading above 30% of the viewport.
-- **Stopped flag:** on a return visit, a "You stopped here" chip (0.6875rem, 700, uppercase, dye text, 1px dye border, 2px corners) appears under the saved heading. The position is saved to `localStorage` once the reader has scrolled past 200px, and storage failures are tolerated.
+- **Collapsed by default:** only top-level sections show. The section being read expands to show its subsections (grid rows 0fr to 1fr over 0.25s ease-out) with its title in Ink, and collapses again once the reader leaves it. The rail scrolls itself to keep the current item in view.
+- **Stopped flag:** on a return visit, a "You stopped here" chip (0.6875rem, 700, uppercase, dye text, 1px dye border, 2px corners) appears under the saved heading, or under its top-level section when the saved heading is a collapsed subsection, and links straight to it. The position is saved to `localStorage` once the reader has scrolled past 200px, and storage failures are tolerated.
 - **1100px and below:** a bordered sheet disclosure; its summary shows "Contents" and the current section name in dye, with a chevron that rotates 180 degrees when open.
 
 ### Specimen label (signature)
@@ -366,7 +374,6 @@ State transitions only: links and the toggle change colour over 0.15s ease; the 
 Entries are markdown in `src/data/blog-posts/<topic>/`, validated by `src/content.config.js`. Beyond `title`, `slug`, `publishDate`, `description`, `draft` and `tags`, the field-guide fields are:
 - `section`: `writing` (default, served at `/blog`), `projects` or `research`. Sets the page dye, the active thumb tab and the plate number sequence.
 - `object`: the kernel object studied, shown as "Object" on the specimen label and index row.
-- `family`: the subsystem it belongs to, shown as "Family".
 - `series` and `part` (positive integer): group the entry into a series, giving "Part n of N" on the label head, the series list in the foot, the "Next" row on the label, and series groups on indexes.
 - `sketch`: the id of an SVG in `src/assets/sketches/` to mount as the plate figure (preferred); `hero` is an image path under `/public` used when there is no sketch.
 - `heroAlt`: the accessible label for the sketch or image.

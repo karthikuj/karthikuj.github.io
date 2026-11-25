@@ -9,9 +9,8 @@ section: writing
 series: Securing a Section of Windows
 part: 2
 object: Section (named)
-family: Object manager
 sketch: section-construction
-heroCaption: A named section being lowered into its place in the object namespace
+heroCaption: A named section being lowered into its place.
 heroAlt: Workers lowering a block labelled "Section (memory mapped)" onto its frame with a crane, scaffolding and a ladder.
 ---
 

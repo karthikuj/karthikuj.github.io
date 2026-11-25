@@ -14,6 +14,14 @@ const top = headings.length ? Math.min(...headings.map((h) => h.depth)) : 1;
 const items = headings
 	.filter((h) => h.depth <= top + 1)
 	.map((h) => ({ ...h, text: h.text.replace(/^(Exercise\s+\d+)(?=[^\s:])/i, '$1: '), sub: h.depth > top }));
+
+// The rail nests each section's subsections under it; only the section being read is expanded.
+type Item = (typeof items)[number];
+const groups: { head: Item; subs: Item[] }[] = [];
+for (const item of items) {
+	if (!item.sub || groups.length === 0) groups.push({ head: item, subs: [] });
+	else groups[groups.length - 1].subs.push(item);
+}
 ---
 
 {
@@ -21,11 +29,24 @@ const items = headings
 			<aside class="rail" aria-label="Contents" data-contents data-key={storageKey}>
 				<h2 class="label-key">Contents</h2>
 				<ol>
-					{items.map((h) => (
-						<li class:list={{ sub: h.sub }}>
-							<a href={`#${h.slug}`} data-target={h.slug}>
-								{h.text}
+					{groups.map((g) => (
+						<li class="group" data-group={g.head.slug}>
+							<a href={`#${g.head.slug}`} data-target={g.head.slug} data-parent={g.head.slug}>
+								{g.head.text}
 							</a>
+							{g.subs.length > 0 && (
+								<div class="subs-wrap">
+									<ol class="subs">
+										{g.subs.map((s) => (
+											<li class="sub">
+												<a href={`#${s.slug}`} data-target={s.slug} data-parent={g.head.slug}>
+													{s.text}
+												</a>
+											</li>
+										))}
+									</ol>
+								</div>
+							)}
 						</li>
 					))}
 				</ol>
@@ -73,16 +94,34 @@ const items = headings
 			/* storage unavailable: the rail still tracks the current section */
 		}
 
-		// Flag the section the reader stopped at on a previous visit.
+		// Flag the section the reader stopped at on a previous visit. A subsection's flag sits under its
+		// top-level section (subsections are collapsed) and links straight to the subsection.
 		if (saved && saved !== targets[0].id) {
 			const link = links.find((a) => a.dataset.target === saved);
-			if (link) {
-				const flag = document.createElement('span');
+			const parent = link && rail.querySelector<HTMLAnchorElement>(`a[data-target="${link.dataset.parent}"]`);
+			if (link && parent) {
+				const flag = document.createElement('a');
 				flag.className = 'stopped';
+				flag.href = `#${saved}`;
 				flag.textContent = FLAG_TEXT;
-				link.after(flag);
+				parent.after(flag);
 			}
 		}
+
+		const groups = Array.from(rail.querySelectorAll<HTMLElement>('li.group'));
+		let openGroup = '';
+		let settle = 0;
+
+		// Keep the current link inside the rail's own scroll area once the expand animation settles.
+		const reveal = (link: HTMLElement) => {
+			clearTimeout(settle);
+			settle = window.setTimeout(() => {
+				const r = rail.getBoundingClientRect();
+				const l = link.getBoundingClientRect();
+				if (l.bottom > r.bottom - 8) rail.scrollTop += l.bottom - r.bottom + 24;
+				else if (l.top < r.top + 8) rail.scrollTop -= r.top - l.top + 24;
+			}, 280);
+		};
 
 		let current = '';
 		let frame = 0;
@@ -100,12 +139,21 @@ const items = headings
 			document.querySelectorAll('[data-contents-now]').forEach((el) => {
 				if (label) el.textContent = label;
 			});
+			let currentLink: HTMLAnchorElement | undefined;
 			for (const a of links) {
 				const on = a.dataset.target === current;
 				a.classList.toggle('current', on);
-				if (on) a.setAttribute('aria-current', 'location');
-				else a.removeAttribute('aria-current');
+				if (on) {
+					a.setAttribute('aria-current', 'location');
+					currentLink = a;
+				} else a.removeAttribute('aria-current');
 			}
+			const group = currentLink?.dataset.parent ?? '';
+			if (group !== openGroup) {
+				openGroup = group;
+				for (const g of groups) g.classList.toggle('open', g.dataset.group === group);
+			}
+			if (currentLink) reveal(currentLink);
 			if (window.scrollY > 200) {
 				try {
 					localStorage.setItem(key, current);
@@ -181,7 +229,34 @@ const items = headings
 		padding-left: calc(1.75rem - 1px);
 	}
 
+	/* The section being read keeps its title in ink while one of its subsections is current. */
+	.rail li.group:global(.open) > a:not(:global(.current)) {
+		color: var(--ink);
+	}
+
+	/* Subsections stay collapsed until their section is the one being read. */
+	.subs-wrap {
+		display: grid;
+		grid-template-rows: 0fr;
+		visibility: hidden;
+		transition:
+			grid-template-rows 0.25s var(--ease-out),
+			visibility 0s linear 0.25s;
+	}
+
+	.rail li.group:global(.open) > .subs-wrap {
+		grid-template-rows: 1fr;
+		visibility: visible;
+		transition: grid-template-rows 0.25s var(--ease-out);
+	}
+
+	.subs {
+		min-height: 0;
+		overflow: hidden;
+	}
+
 	.rail :global(.stopped) {
+		text-decoration: none;
 		display: inline-block;
 		margin: 0.1rem 0 0.35rem 0.9rem;
 		padding: 0.05rem 0.45rem;

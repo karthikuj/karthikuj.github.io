@@ -83,7 +83,6 @@ section: writing
 series: Securing a Section of Windows
 part: 3
 object: Section (named)
-family: Object manager
 ---
 
 Opening paragraph…
@@ -105,7 +104,6 @@ Opening paragraph…
 | `series` | no | `Securing a Section of Windows` | Groups parts. Use exactly the same text in every part. |
 | `part` | no | `3` | Part number. Shows "Part 3 of N", the series list and the "Next" row. |
 | `object` | no | `Section (named)` | The specimen label's **Object**: the kernel object or thing under study. |
-| `family` | no | `Object manager` | The specimen label's **Family**: the subsystem it belongs to. |
 | `sketch` | no | `section-construction` | The plate illustration: a folder name in `public/assets/sketches/` (see §7). |
 | `heroAlt` | with sketch | `Workers lowering a block…` | Full description of the illustration for screen readers. |
 | `heroCaption` | with sketch | `A named section being lowered…` | Short caption under the plate, starting "Fig.". |
@@ -158,6 +156,24 @@ HANDLE hSection = CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRI
 | `asm`, `nasm`, `x86asm` | Assembly |
 | `text`, `txt`, `plaintext` | Output (use for WinDbg and other raw output) |
 | `json`, `yaml`, `xml`, `diff`, `python`, `rust`, `go`, `js`, `ts` | as named |
+
+### Margin notes
+
+On wide screens the right side of the text column holds margin notes, small notes hung beside the
+paragraph they belong to. Two forms become margin notes:
+
+```markdown
+Read more: [NtCreateSectionEx](https://learn.microsoft.com/…)
+
+> **Aside:** The default DACL comes from the token, not the creating process.
+```
+
+- Put the note right after the paragraph or list it belongs to. If a code listing or figure sits in
+  between, the note attaches to the paragraph above that, usually the "Here's the signature…" line.
+- Keep notes short, a link or a sentence or two. Long asides belong in the text.
+- On narrower screens and phones, notes fold back under their paragraph as a small line.
+- Use **Aside** for side remarks and **Read more** for references. For things the reader must not
+  miss, use a `> **Note:**` box instead; that stays in the text column.
 
 ### Notes, tables and links
 
@@ -321,7 +337,7 @@ Check:
 - Wide listings scroll inside their box, not the page.
 - Figures have captions.
 - The plate looks right in both themes (use the toggle in the header) and at phone width.
-- Search finds the post by title, object, family and tags.
+- Search finds the post by title, object and tags.
 
 ---
 
@@ -364,7 +380,7 @@ Before you push:
 
 - [ ] `title`, `slug`, `publishDate` and `description` are set; `draft: true` is removed
 - [ ] `section` is correct; `series` and `part` are set if it's part of a series
-- [ ] `object` and `family` are set, so the specimen label is complete
+- [ ] `object` is set, so the specimen label is complete
 - [ ] `sketch`, `heroAlt` and `heroCaption` are set, and the plate looks right in light and dark mode
 - [ ] Every image has descriptive alt text; every code block has a language
 - [ ] No manual table of contents

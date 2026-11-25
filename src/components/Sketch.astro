@@ -33,7 +33,12 @@ const base = `/assets/sketches/${id}`;
 
 {
 	layered ? (
-		<div class="sketch traced" role="img" aria-label={label} style={`aspect-ratio: ${layered.width} / ${layered.height}`}>
+		<div
+			class="sketch traced"
+			role="img"
+			aria-label={label}
+			style={`aspect-ratio: ${layered.width} / ${layered.height}; --ratio: ${(layered.width / layered.height).toFixed(4)}`}
+		>
 			<span class="layer paper" style={`--mask: url(${base}/paper.svg)`} />
 			<span class="layer tone" style={`--mask: url(${base}/tone.svg)`} />
 			<span class="layer ink" style={`--mask: url(${base}/ink.svg)`} />
@@ -55,8 +60,10 @@ const base = `/assets/sketches/${id}`;
 		height: auto;
 	}
 
+	/* A page can cap the drawn height with --sketch-max-h; the width follows the sketch's proportions. */
 	.traced {
 		position: relative;
+		max-width: calc(var(--sketch-max-h, 100000px) * var(--ratio));
 	}
 
 	.layer {

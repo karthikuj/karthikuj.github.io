@@ -66,7 +66,6 @@ const nextPart = d.part ? series.find((p) => p.data.part === d.part! + 1) : unde
 					rows={[
 						{ key: 'Status', value: d.draft ? 'Draft: visible only on the dev server' : null },
 						{ key: 'Object', value: d.object },
-						{ key: 'Family', value: d.family },
 						{ key: 'Series', value: d.series },
 						{ key: 'Language', value: d.language },
 						{ key: 'Collected', value: formatDate(d.publishDate) },
@@ -169,6 +168,29 @@ const nextPart = d.part ? series.find((p) => p.data.part === d.part! + 1) : unde
 		</article>
 	</div>
 </BaseLayout>
+
+<script>
+	// Margin notes hang beside their paragraph; when two land close together, push the later one down
+	// so they never overlap. Runs again whenever the layout width changes.
+	function spaceNotes() {
+		const notes = Array.from(document.querySelectorAll<HTMLElement>('.prose .has-note > .margin-note'));
+		for (const n of notes) n.style.transform = '';
+		let lastBottom = -Infinity;
+		for (const n of notes) {
+			if (getComputedStyle(n).position !== 'absolute') continue;
+			const r = n.getBoundingClientRect();
+			const shift = lastBottom + 16 - r.top;
+			if (shift > 0) n.style.transform = `translateY(${shift}px)`;
+			lastBottom = r.bottom + Math.max(shift, 0);
+		}
+	}
+
+	const prose = document.querySelector('.prose');
+	if (prose) {
+		new ResizeObserver(() => spaceNotes()).observe(prose);
+		document.fonts?.ready.then(spaceNotes);
+	}
+</script>
 
 <style>
 	.entry {

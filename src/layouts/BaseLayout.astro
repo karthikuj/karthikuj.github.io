@@ -50,10 +50,20 @@ const section = current === 'writing' || current === 'projects' || current === '
 		padding: 3rem 0 5rem;
 	}
 
+	/* Keyboard-only: fully clipped until it receives focus, so no edge can peek in at any font size or zoom. */
+	.skip:not(:focus) {
+		clip-path: inset(50%);
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		white-space: nowrap;
+		padding: 0;
+	}
+
 	.skip {
 		position: absolute;
 		left: 1rem;
-		top: -3rem;
+		top: 1rem;
 		z-index: 10;
 		background: var(--ink);
 		color: var(--board);
@@ -62,10 +72,6 @@ const section = current === 'writing' || current === 'projects' || current === '
 		padding: 0.5rem 0.9rem;
 		border-radius: 3px;
 		text-decoration: none;
-	}
-
-	.skip:focus {
-		top: 1rem;
 	}
 
 	@media (max-width: 900px) {

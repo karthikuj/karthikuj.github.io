@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EntryIndex from './EntryIndex.astro';
+import Sketch from './Sketch.astro';
 import { SECTIONS, getEntries, type SectionId } from '../lib/entries';
 
 export interface Props {
@@ -16,16 +17,54 @@ const count = items.length === 0 ? 'No plates yet' : items.length === 1 ? '1 pla
 
 <BaseLayout title={`${s.label} — Karthik's blog`} description={s.dek} permalink={permalink} current={section}>
 	<header class="index-head">
-		<h1 class="page-title">{s.label}</h1>
-		<p class="dek">{s.dek}</p>
-		<p class="count"><span class="dye-mark"></span>{count}</p>
+		<div class="head-copy">
+			<h1 class="page-title">{s.label}</h1>
+			<p class="dek">{s.dek}</p>
+			<p class="count"><span class="dye-mark"></span>{count}</p>
+		</div>
+		<div class="head-sketch" style={`--sketch-scale: ${s.sketch.scale ?? 1}`}>
+			<Sketch id={s.sketch.id} label={s.sketch.alt} />
+		</div>
 	</header>
 	<EntryIndex items={items} section={section} emptyText={s.empty} searchLabel={`Search ${s.label.toLowerCase()}`} />
 </BaseLayout>
 
 <style>
+	/* Title, dek and count on the left; the section's sketch fills the right, aligned with the key's edge. */
 	.index-head {
-		max-width: 960px;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 2rem 3rem;
+		max-width: 1080px;
+	}
+
+	.head-sketch {
+		--sketch-max-h: calc(15rem * var(--sketch-scale, 1));
+		width: min(26rem, 38vw);
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.head-sketch :global(.sketch) {
+		margin-left: auto;
+	}
+
+	@media (max-width: 760px) {
+		.index-head {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 1.5rem;
+		}
+
+		.head-sketch {
+			--sketch-max-h: calc(10rem * var(--sketch-scale, 1));
+			width: 100%;
+			justify-content: flex-start;
+		}
+
+		.head-sketch :global(.sketch) {
+			margin-left: 0;
+		}
 	}
 
 	.index-head .dek {

@@ -8,9 +8,8 @@ section: writing
 series: Securing a Section of Windows
 part: 1
 object: Section (anonymous)
-family: Memory manager
 sketch: section-secured
-heroCaption: A section object holding its memory pages, locked against unwanted writers
+heroCaption: A locked section object holding its memory.
 heroAlt: A section object drawn as a filing block holding a stack of memory pages, with a padlock attached and callouts for "Secured" and "Memory section object".
 ---
 

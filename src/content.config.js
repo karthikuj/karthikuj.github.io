@@ -12,9 +12,8 @@ const posts = defineCollection({
 		tags: z.array(z.string()).optional(),
 		/** Which part of the site the entry lives in. Writing is served from /blog. */
 		section: z.enum(['writing', 'projects', 'research']).default('writing'),
-		/** Specimen label: the object the entry studies, and its family. */
+		/** Specimen label: the object the entry studies. */
 		object: z.string().optional(),
-		family: z.string().optional(),
 		/** Series name and this entry's part number within it. */
 		series: z.string().optional(),
 		part: z.number().int().positive().optional(),

@@ -48,7 +48,6 @@ section: writing             # writing | projects | research
 series: Securing a Section of Windows   # optional: groups parts together
 part: 1                      # optional: this entry's part number
 object: Section (anonymous)  # optional: specimen label "Object"
-family: Memory manager       # optional: specimen label "Family"
 
 sketch: section-secured      # plate illustration id (see Sketches)
 heroAlt: Alt text describing the illustration in full.
@@ -87,6 +86,9 @@ for the image AI, and what to ask Claude, are in
 
 If faint hatching drops out, raise the thresholds: `npm run sketch -- <id>.png <id> 120 205`. The two
 numbers are the ink and tone luminance cut-offs, 105 and 190 by default.
+
+Each section index shows its own sketch beside the title: `writing-quill`, `projects-hammer` and
+`research-scientist`, set in `SECTIONS` in `src/lib/entries.ts`. The home page uses `author-at-laptop`.
 
 A hand-drawn SVG in `src/assets/sketches/<id>.svg`, drawn with `currentColor`, also works as a sketch.
 

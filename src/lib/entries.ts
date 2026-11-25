@@ -3,24 +3,43 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type SectionId = 'writing' | 'projects' | 'research';
 export type Entry = CollectionEntry<'posts'>;
 
-export const SECTIONS: Record<SectionId, { label: string; base: string; dek: string; empty: string }> = {
+type SectionInfo = {
+	label: string;
+	base: string;
+	dek: string;
+	empty: string;
+	/**
+	 * Sketch shown beside the index title (public/assets/sketches/<id>/) and its description.
+	 * `scale` enlarges an upright sketch so it carries the same weight as the wide ones (default 1).
+	 */
+	sketch: { id: string; alt: string; scale?: number };
+};
+
+export const SECTIONS: Record<SectionId, SectionInfo> = {
 	writing: {
 		label: 'Writing',
 		base: '/blog',
 		dek: 'Long-form notes on Windows internals: how objects work, how they are secured, and exercises you can repeat.',
 		empty: 'No posts published yet.',
+		sketch: { id: 'writing-quill', alt: 'Pencil sketch of a hand in a rolled-up sleeve writing with a feathered quill pen' },
 	},
 	projects: {
 		label: 'Projects',
 		base: '/projects',
 		dek: 'Tools and repos I have built, with write-ups on how they work.',
 		empty: 'No project write-ups published yet. The first one will appear here.',
+		sketch: { id: 'projects-hammer', alt: 'Pencil sketch of a hand gripping a claw hammer' },
 	},
 	research: {
 		label: 'Research',
 		base: '/research',
 		dek: 'Vulnerability research write-ups.',
 		empty: 'No research published yet. The first write-up will appear here.',
+		sketch: {
+			id: 'research-scientist',
+			scale: 1.45,
+			alt: 'Pencil sketch of a smiling scientist in goggles and a lab coat pouring liquid from a flask into a test tube',
+		},
 	},
 };
 

@@ -318,6 +318,55 @@ a.tag:hover {
   margin: 0;
 }
 
+/* Margin notes ("Read more: …", "> **Aside:** …"), attached to a paragraph by rehype-field-guide.
+   Narrow column: a small note under its paragraph. Wide column: hung in the right margin beside it. */
+.prose {
+  container: prose / inline-size;
+}
+
+.margin-note {
+  display: block;
+  margin-top: 0.55rem;
+  font-family: var(--font-frame);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.margin-note .label-key {
+  margin-right: 0.35rem;
+}
+
+.margin-note .mn-para {
+  display: block;
+  margin-top: 0.4rem;
+}
+
+.margin-note a {
+  overflow-wrap: anywhere;
+}
+
+.prose > .note-only {
+  margin-top: 0.6em;
+}
+
+@container prose (min-width: 940px) {
+  .has-note {
+    position: relative;
+  }
+
+  .has-note > .margin-note {
+    position: absolute;
+    top: 0.3rem;
+    left: calc(100% + 2.75rem);
+    width: min(15.5rem, calc(100cqw - 100% - 2.75rem));
+    margin-top: 0;
+    padding-top: 0.45rem;
+    border-top: 1px solid var(--rule);
+  }
+}
+
 .prose :not(pre) > code {
   font-size: 0.84em;
   background: var(--code-tint);

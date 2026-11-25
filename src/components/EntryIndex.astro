@@ -32,7 +32,6 @@ const searchIndex = items.map(({ entry }) => ({
 	description: entry.data.description,
 	tags: entry.data.tags ?? [],
 	object: entry.data.object ?? '',
-	family: entry.data.family ?? '',
 	series: entry.data.series ?? '',
 }));
 ---
@@ -99,17 +98,12 @@ const searchIndex = items.map(({ entry }) => ({
 												<a href={entryUrl(entry)}>{d.title}</a>
 											</h3>
 											<p>{d.description}</p>
-											{(d.object || d.family || d.part) && (
+											{(d.object || d.part) && (
 												<p class="meta">
 													{d.part && <span>Part {d.part}</span>}
 													{d.object && (
 														<span>
 															<span class="label-key">Object</span> {d.object}
-														</span>
-													)}
-													{d.family && (
-														<span>
-															<span class="label-key">Family</span> {d.family}
 														</span>
 													)}
 												</p>
@@ -139,7 +133,7 @@ const searchIndex = items.map(({ entry }) => ({
 <script>
 	import Fuse from 'fuse.js';
 
-	type Item = { id: string; title: string; description: string; tags: string[]; object: string; family: string; series: string };
+	type Item = { id: string; title: string; description: string; tags: string[]; object: string; series: string };
 
 	document.querySelectorAll<HTMLElement>('[data-key-index]').forEach((root) => {
 		const data: Item[] = JSON.parse(root.querySelector('[data-search-index]')?.textContent || '[]');
@@ -150,7 +144,7 @@ const searchIndex = items.map(({ entry }) => ({
 		const groups = Array.from(root.querySelectorAll<HTMLElement>('[data-group]'));
 		const noMatch = root.querySelector<HTMLElement>('.no-match');
 		const fuse = new Fuse(data, {
-			keys: ['title', 'description', 'tags', 'object', 'family', 'series'],
+			keys: ['title', 'description', 'tags', 'object', 'series'],
 			threshold: 0.32,
 			ignoreLocation: true,
 		});
